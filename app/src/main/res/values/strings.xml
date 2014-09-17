@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">Project</string>
-    <string name="hello_world">Hello Minh Thy hello !</string>
+    <string name="hello_world">Hello Minh Thy hello There!</string>
     <string name="action_settings">Settings</string>
 
 </resources>
