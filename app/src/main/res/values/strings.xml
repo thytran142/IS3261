@@ -6,5 +6,15 @@
     <string name="Default_msg">This is the front page!</string>
     <string name="action_settings">Settings again</string>
     <string name="title_activity_front">FrontActivity</string>
+    <string name="title_activity_location">LocationActivity</string>
+
+
+
+    <string-array name="navigation_array">
+    <item>My Location</item>
+    <item>Second</item>
+    <item>Third</item>
+    <item>Fourth</item>
+    </string-array>
 
 </resources>
