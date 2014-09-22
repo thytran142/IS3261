@@ -2,6 +2,7 @@ package com.example.tranthy.project;
 
 import android.app.Activity;
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
@@ -17,24 +18,45 @@ public class FrontActivity extends Activity {
     private String[] mPlanetTitles;
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
+    private View mDrawerList_header;
+    private Intent myIntent;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_front);
-
+        mDrawerList_header = (View)getLayoutInflater().inflate(R.layout.drawerlist_header, mDrawerList);
         mPlanetTitles = getResources().getStringArray(R.array.navigation_array);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
-
+        mDrawerList.setHeaderDividersEnabled(true);
+        mDrawerList.addHeaderView(mDrawerList_header);
         // Set the adapter for the list view
         mDrawerList.setAdapter(new ArrayAdapter<String>(this,
                 R.layout.drawer_list_item, mPlanetTitles));
         // Set the list's click listener
-        //mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
     }
+
+    private class DrawerItemClickListener implements ListView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView parent, View view, int position, long id) {
+            selectItem(position);
+        }
+    }
+
+    private void selectItem(int position) {
+        switch(position){
+            case 1 :
+                myIntent = new Intent(this,LocationActivity.class);
+                startActivity(myIntent);
+
+        }
+    }
+
+
 
 
 

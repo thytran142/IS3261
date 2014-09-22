@@ -11,10 +11,10 @@
 
 
     <string-array name="navigation_array">
-    <item>My Location</item>
-    <item>Second</item>
-    <item>Third</item>
-    <item>Fourth</item>
+    <item>Location</item>
+    <item>Monitor</item>
+    <item>Contacts</item>
+    <item>Preference</item>
     </string-array>
 
 </resources>
