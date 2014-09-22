@@ -50,11 +50,11 @@ public class LocationActivity extends Activity {
             LocationListener locationListener = new LocationListener(){
                 public void onLocationChanged(Location location) {
                     LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                    //Marker currentLoc = map.addMarker(new MarkerOptions().position(latLng).title("Current Location")
-                            //.snippet("Here you are").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_launcher)));
+                    Marker currentLoc = map.addMarker(new MarkerOptions().position(latLng).title("Current Location")
+                            .snippet("Here you are").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_launcher)));
                     Toast.makeText(getBaseContext(), "This is your location - " + location.getLatitude() + ", " + location.getLongitude(), Toast.LENGTH_LONG).show();
-                    //map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 30));
-                    //map.animateCamera(CameraUpdateFactory.zoomTo(30), 2000, null);
+                    map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 30));
+                    map.animateCamera(CameraUpdateFactory.zoomTo(30), 2000, null);
                 }
                 public void onStatusChanged(String provider,int status,Bundle extras){}
                 public void onProviderEnabled(String provider){}
