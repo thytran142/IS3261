@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="wrap_content"
+    android:layout_width="wrap_content">
+
+    <!-- When selected, use this -->
+    <item android:drawable="@drawable/alert_button_click"
+        android:state_checked="true" />
+    <!-- When not selected, use this-->
+
+    <item android:drawable="@drawable/alert_button"
+        android:state_checked="false"/>
+
+</selector>

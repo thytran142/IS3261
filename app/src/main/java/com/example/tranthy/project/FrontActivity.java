@@ -26,6 +26,7 @@ public class FrontActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_front);
+        /**
         mDrawerList_header = (View)getLayoutInflater().inflate(R.layout.drawerlist_header, mDrawerList);
         mPlanetTitles = getResources().getStringArray(R.array.navigation_array);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -37,9 +38,9 @@ public class FrontActivity extends Activity {
                 R.layout.drawer_list_item, mPlanetTitles));
         // Set the list's click listener
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
-
+**/
     }
-
+/**
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView parent, View view, int position, long id) {
@@ -55,7 +56,7 @@ public class FrontActivity extends Activity {
 
         }
     }
-
+**/
 
 
 
