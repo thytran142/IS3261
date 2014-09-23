@@ -9,22 +9,6 @@ android:layout_height="match_parent">
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <ToggleButton
-        android:layout_width="108dp"
-        android:layout_height="84dp"
-        android:text="ToggleButton2"
-        android:button="@drawable/flashlight_button_status"
-        android:id="@+id/toggle_flashlight"
-        android:layout_gravity="left|bottom"
-        android:focusable="false" />
-
-    <ToggleButton
-        android:layout_width="110dp"
-        android:layout_height="wrap_content"
-        android:text="ToggleButton1"
-        android:button="@drawable/alarm_button_status"
-        android:id="@+id/toggle_alarm"
-        android:layout_gravity="left|top" />
 </FrameLayout>
 <!-- The navigation drawer -->
 <ListView android:id="@+id/left_drawer"
