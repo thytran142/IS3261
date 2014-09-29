@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">LocateMiProject</string>
-    <string name="hello_world">Contact setting here</string>
+    <string name="hello_world">Hello there</string>
     <string name="Default_msg">This is the front page!</string>
     <string name="action_settings">Settings again</string>
     <string name="title_activity_front">FrontActivity</string>
