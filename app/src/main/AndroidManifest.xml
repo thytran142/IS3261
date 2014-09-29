@@ -30,6 +30,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!--I declare Contact Setting activity here-->
+        <activity
+            android:name=".ContactSetting"
+            android:label="@string/contact_setting"
+            android:parentActivityName=".MainActivity">
+
+        </activity>
         <activity
             android:name=".FrontActivity"
             android:label="@string/title_activity_front" >

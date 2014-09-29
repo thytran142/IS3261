@@ -5,48 +5,35 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.content.DialogInterface;
+import android.support.v7.app.ActionBarActivity;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.app.Activity;
+import android.view.View;
 
+import android.content.Intent;
 
 public class MainActivity extends Activity {
+    Intent myIntent;
 
+    //Declare function intent here
+    public void goToContactSetting(View v){
+        myIntent = new Intent(this,ContactSetting.class);//start ContactSetting
+        startActivity(myIntent);
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        Thread logoTimer = new Thread() {
-            public void run(){
-                try{
-                    int logoTimer = 0;
-                    while(logoTimer < 3000){
-                        sleep(100);
-                        logoTimer = logoTimer +100;
-                    }
-                    startActivity(new Intent("android.intent.action.FRONT"));
-                }
-
-                catch (InterruptedException e) {
-
-                    e.printStackTrace();
-                }
-
-                finally{
-                    finish();
-                }
-            }
-        };
-
-        logoTimer.start();
     }
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -58,4 +45,5 @@ public class MainActivity extends Activity {
         }
         return super.onOptionsItemSelected(item);
     }
+
 }

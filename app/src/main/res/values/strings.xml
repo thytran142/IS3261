@@ -7,14 +7,14 @@
     <string name="action_settings">Settings again</string>
     <string name="title_activity_front">FrontActivity</string>
     <string name="title_activity_location">LocationActivity</string>
+    <!--declare menu string here-->
+    <string name="check_location">My location</string>
+    <string name="create_account">Create account</string>
+    <string name="language_setting">Language Setting</string>
+    <string name="message_setting">Message Setting</string>
+    <string name="alert_setting">Alert Setting</string>
+    <string name="contact_setting">Contact Setting</string>
 
 
-
-    <string-array name="navigation_array">
-    <item>Location</item>
-    <item>Monitor</item>
-    <item>Contacts</item>
-    <item>Map</item>
-    </string-array>
 
 </resources>
