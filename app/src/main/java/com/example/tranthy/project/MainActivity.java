@@ -27,6 +27,22 @@ public class MainActivity extends Activity {
         myIntent=new Intent(this,MyLocation.class);
         startActivity(myIntent);
     }
+    public void goToCreateAccount(View v){
+        myIntent=new Intent(this,CreateAccount.class);
+        startActivity(myIntent);
+    }
+    public void goToLanguageSetting(View v){
+        myIntent=new Intent(this,LanguageSetting.class);
+        startActivity(myIntent);
+    }
+    public void goToMessageSetting(View v){
+        myIntent = new Intent(this,MessageSetting.class);
+        startActivity(myIntent);
+    }
+    public void goToAlertSetting(View v){
+        myIntent= new Intent(this,AlertSetting.class);
+        startActivity(myIntent);
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

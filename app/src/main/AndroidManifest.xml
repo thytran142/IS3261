@@ -37,10 +37,31 @@
             android:parentActivityName=".MainActivity">
 
         </activity>
+        <activity android:name=".MyLocation"
+            android:label="@string/check_location"
+            android:parentActivityName=".MainActivity">
 
+        </activity>
+        <activity android:name=".CreateAccount"
+            android:label="@string/create_account"
+            android:parentActivityName=".MainActivity">
 
+        </activity>
+        <activity android:name=".LanguageSetting"
+            android:label="@string/language_setting"
+            android:parentActivityName=".MainActivity">
 
+            </activity>
+        <activity android:name=".MessageSetting"
+            android:label="@string/message_setting"
+            android:parentActivityName=".MainActivity">
 
+            </activity>
+        <activity android:name=".AlertSetting"
+            android:label="@string/alert_setting"
+            android:parentActivityName=".MainActivity">
+
+            </activity>
     </application>
 
 </manifest>
