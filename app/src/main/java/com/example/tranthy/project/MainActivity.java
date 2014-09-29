@@ -12,11 +12,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.app.Activity;
 import android.view.View;
-
+import com.google.android.gms.maps.GoogleMap;
 import android.content.Intent;
 
 public class MainActivity extends Activity {
     Intent myIntent;
+
 
     //Declare function intent here
     public void goToContactSetting(View v){
