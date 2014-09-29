@@ -23,6 +23,10 @@ public class MainActivity extends Activity {
         myIntent = new Intent(this,ContactSetting.class);//start ContactSetting
         startActivity(myIntent);
     }
+    public void goToMyLocation(View v){
+        myIntent=new Intent(this,MyLocation.class);
+        startActivity(myIntent);
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
