@@ -40,4 +40,35 @@
             android:layout_weight=".5"
             android:text="@string/from_contact"/>
         </LinearLayout>
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/linearLayoutContact2"
+        android:paddingTop="@dimen/activity_vertical_margin">
+        <TableRow
+            android:id="@+id/tableTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="4dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/contact_title"
+                android:textSize="20sp"/>
+        </TableRow>
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="2dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/no_contact"
+                android:textSize="10sp"/>
+
+        </TableRow>
+        </TableLayout>
 </RelativeLayout>
