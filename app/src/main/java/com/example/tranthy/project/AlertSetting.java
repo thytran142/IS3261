@@ -1,5 +1,5 @@
 package com.example.tranthy.project;
-
+/* This class is to handle the alert setting: such as sound, email, sms, priority...*/
 import android.app.Activity;
 import android.os.Bundle;
 import android.app.ActionBar;

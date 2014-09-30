@@ -18,5 +18,6 @@
     <string name="contact_setting_instruction">Contact Setting allows you to restrict who can receive SMS/Email about your current location.</string>
     <string name="add_manually">Add manually</string>
     <string name="from_contact">From contacts</string>
+    <string name="add_manually_instruction">Enter a name,number and email to add to the list.</string>
 
 </resources>

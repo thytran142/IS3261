@@ -1,5 +1,5 @@
 package com.example.tranthy.project;
-
+/* This class is to hanle the list of contacts user add to sms or email*/
 import android.app.Activity;
 import android.os.Bundle;
 import android.app.ActionBar;
@@ -7,13 +7,38 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.content.Intent;
-public class ContactSetting extends Activity {
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import com.example.tranthy.project.AddManuallyContact.AddManuallyContactInterface;
+import android.view.View;
+import android.widget.Toast;
+
+//Import library for the dialog
+public class ContactSetting extends FragmentActivity
+        implements AddManuallyContactInterface
+{
+
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.contact_setting);
 
 
+    }
+    public void showAddManuallyDialog(View view){
+        showAddManually();
+    }
+    private void showAddManually(){
+        FragmentManager fragmentManager=getSupportFragmentManager();
+        AddManuallyContact addManuallyContact=new AddManuallyContact();
+        addManuallyContact.setCancelable(false);
+        addManuallyContact.setDialogTitle("Add Manually");
+        addManuallyContact.show(getFragmentManager(),"input dialog");
+    }
+    @Override
+    public void onFinishInputDialog(String inputText){
+        //testing
+        Toast.makeText(this,"Returned from dialog: "+inputText,Toast.LENGTH_SHORT).show();
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu){

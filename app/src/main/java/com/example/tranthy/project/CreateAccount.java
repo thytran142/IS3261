@@ -1,5 +1,5 @@
 package com.example.tranthy.project;
-
+/* This class is to create the account so user can have passcode every time they enter this class*/
 import android.app.Activity;
 import android.os.Bundle;
 import android.app.ActionBar;

@@ -1,5 +1,5 @@
 package com.example.tranthy.project;
-
+/* This class is to handle the message custom content for each person*/
 import android.app.Activity;
 import android.os.Bundle;
 import android.app.ActionBar;

@@ -1,5 +1,6 @@
 package com.example.tranthy.project;
-
+/*This class is finished. However, how to output the string of the user' location, and when user turn off, needs to pass the data
+to the activity main so they will inform the contact list of user */
 import android.app.Activity;
 import android.content.Context;
 import android.location.Location;
