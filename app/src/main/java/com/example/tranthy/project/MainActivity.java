@@ -32,8 +32,8 @@ public class MainActivity extends Activity {
         myIntent=new Intent(this,CreateAccount.class);
         startActivity(myIntent);
     }
-    public void goToLanguageSetting(View v){
-        myIntent=new Intent(this,LanguageSetting.class);
+    public void goToMessageHistory(View v){
+        myIntent=new Intent(this,MessageHistory.class);
         startActivity(myIntent);
     }
     public void goToMessageSetting(View v){

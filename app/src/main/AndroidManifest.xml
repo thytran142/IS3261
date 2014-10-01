@@ -55,8 +55,8 @@
             android:parentActivityName=".MainActivity">
 
         </activity>
-        <activity android:name=".LanguageSetting"
-            android:label="@string/language_setting"
+        <activity android:name=".MessageHistory"
+            android:label="@string/message_history"
             android:parentActivityName=".MainActivity">
 
             </activity>

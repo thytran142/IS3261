@@ -1,5 +1,5 @@
 package com.example.tranthy.project;
-
+/* This class is to create the account so user can have passcode every time they enter this class*/
 import android.app.Activity;
 import android.os.Bundle;
 import android.app.ActionBar;
@@ -7,16 +7,16 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.content.Intent;
-public class LanguageSetting extends Activity {
+public class MessageHistory extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.language_setting);
+        setContentView(R.layout.message_history);
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         MenuInflater inflater=getMenuInflater();
-        inflater.inflate(R.menu.language_setting_actions,menu);
+        inflater.inflate(R.menu.create_account_actions,menu);
         return true;
     }
     @Override

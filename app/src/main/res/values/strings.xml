@@ -10,7 +10,7 @@
     <!--declare menu string here-->
     <string name="check_location">My location</string>
     <string name="create_account">Create account</string>
-    <string name="language_setting">Language Setting</string>
+    <string name="message_history">Message History</string>
     <string name="message_setting">Message Setting</string>
     <string name="alert_setting">Alert Setting</string>
     <string name="contact_setting">Contact Setting</string>
