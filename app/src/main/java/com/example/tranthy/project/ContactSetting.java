@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.app.ActionBar;
 import android.provider.ContactsContract;
+import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,6 +18,7 @@ import com.example.tranthy.project.AddManuallyContact.AddManuallyContactInterfac
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -26,13 +28,26 @@ public class ContactSetting extends FragmentActivity
         implements AddManuallyContactInterface
 {
 
-    ArrayList<contactInfo> contactInfoArrayList = new ArrayList<contactInfo>();
-    contactInfo conInfo;
+
+    ArrayList<String> stringList = new ArrayList<String>();
+    RelativeLayout mainContact;
+    RelativeLayout subContact;
+    ListView contactList;
+    ArrayAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.contact_setting);
+        //populate the arraylist
         getContacts();
+        contactList = (ListView) findViewById(R.id.contactslist);
+        adapter = new ArrayAdapter(this, android.R.layout.simple_selectable_list_item, stringList);
+        contactList.setAdapter(adapter);
+        //disable the subcontact view
+        mainContact = (RelativeLayout)findViewById(R.id.mainContact);
+        subContact = (RelativeLayout)findViewById(R.id.subContact);
+        subContact.setVisibility(View.GONE);
 
     }
     public void showAddManuallyDialog(View view){
@@ -93,8 +108,9 @@ public class ContactSetting extends FragmentActivity
                         String number = pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
                         //testing toast message
                         //Toast.makeText(this,"ID : "+id+ ", NAME : "+name+ ", NUMBER : "+number ,Toast.LENGTH_SHORT).show();
-                        conInfo = new contactInfo(id, name, number);
-                        contactInfoArrayList.add(conInfo);
+
+                        String mergeInfo = name.toUpperCase() + " : "+ number;
+                        stringList.add(mergeInfo);
                     }
                     pCur.close();
                 }
@@ -106,32 +122,20 @@ public class ContactSetting extends FragmentActivity
 
 
     }
-    //this should inflate selectable listview when click
-    public void showListSize(View view){
-        //confirm that the arraylist is populated with the contact info
-        Toast.makeText(this,"Total number of contacts - " + contactInfoArrayList.size(),Toast.LENGTH_SHORT).show();
-        //unable to inflate the listview for now
-        //ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_selectable_list_item, contactInfoArrayList);
-        //ListView contactList = (ListView) findViewById(R.id.contactslist);
-        //contactList.setAdapter(adapter);
+    //switch between view
+    public void showSubContact(View view){
 
-        //LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
-        //inflater.inflate(R.layout.contacts_list_view, null);
+        mainContact.setVisibility(View.GONE);
+        subContact.setVisibility(View.VISIBLE);
+    }
 
+    public void showMainContact(View view){
+        subContact.setVisibility(View.GONE);
+        mainContact.setVisibility(View.VISIBLE);
 
     }
 
-    public class contactInfo {
-        public String id;
-        public String name;
-        public String number;
 
-        public contactInfo(String id, String name, String hometown) {
-            this.name = name;
-            this.number = hometown;
-            this.id = id;
-        }
-    }
 }
 
 
