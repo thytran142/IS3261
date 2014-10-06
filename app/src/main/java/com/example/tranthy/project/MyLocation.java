@@ -3,10 +3,13 @@ package com.example.tranthy.project;
 to the activity main so they will inform the contact list of user */
 import android.app.Activity;
 import android.content.Context;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
 import android.app.ActionBar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -23,8 +26,15 @@ import android.widget.Toast;
 
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
+
 public class MyLocation extends Activity {
     private GoogleMap map;
+
+    String addressText;
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -51,6 +61,48 @@ public class MyLocation extends Activity {
                     Marker currentLoc=map.addMarker(new MarkerOptions().position(latLng).title("Current Location").snippet("This is where you are right now").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_action_place)));
                     map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,30));
                     map.animateCamera(CameraUpdateFactory.zoomTo(30),2000,null);
+
+
+                    Geocoder geocoder = new Geocoder(getApplicationContext(),Locale.getDefault());
+                    // Create a list to contain the result address
+                    List<Address> addresses = null;
+                    try {
+                        //get 3 address
+                        addresses = geocoder.getFromLocation(location.getLatitude(),
+                                location.getLongitude(), 3);
+                    } catch (IOException e1) {
+                        Log.e("LocationSampleActivity",
+                                "IO Exception in getFromLocation()");
+                        e1.printStackTrace();
+
+                    } catch (IllegalArgumentException e2) {
+                        // Error message to post in the log
+                        String errorString = "Illegal arguments " +
+                                Double.toString(location.getLatitude()) +
+                                " , " +
+                                Double.toString(location.getLongitude()) +
+                                " passed to address service";
+                        Log.e("LocationSampleActivity", errorString);
+                        e2.printStackTrace();
+                    }
+
+                    // If the reverse geocode returned an address
+                        if (addresses != null && addresses.size() > 0) {
+                        // Get the first address
+                        Address address = addresses.get(0);
+
+                        addressText = String.format(
+                                "%s, %s, %s",
+                                // If there's a street address, add it
+                                address.getMaxAddressLineIndex() > 0 ?
+                                        address.getAddressLine(0) : "",
+                                // Locality is usually a city
+                                address.getLocality(),
+                                // The country of the address
+                                address.getCountryName());
+                        Toast.makeText(getBaseContext(), "This is your address - " + addressText, Toast.LENGTH_LONG).show();
+                    }
+
                 }
 
                 @Override
