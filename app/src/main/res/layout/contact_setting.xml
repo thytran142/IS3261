@@ -38,7 +38,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight=".5"
-            android:text="@string/from_contact"/>
+            android:text="@string/from_contact"
+            android:onClick="showListSize"/>
         </LinearLayout>
     <TableLayout
         android:layout_width="match_parent"
@@ -71,4 +72,5 @@
 
         </TableRow>
         </TableLayout>
+
 </RelativeLayout>
