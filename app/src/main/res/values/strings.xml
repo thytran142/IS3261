@@ -23,4 +23,7 @@
     <string name="no_contact">No contacts found.</string>
     <string name="backToMain">Back</string>
     <string name="add_selected">Add Selected</string>
+    <string name="alarm_sound">Alarm Sound</string>
+    <string name="danger">Danger</string>
+
 </resources>

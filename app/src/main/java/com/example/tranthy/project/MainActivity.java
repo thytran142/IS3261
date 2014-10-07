@@ -16,6 +16,7 @@ import android.app.Activity;
 import android.view.View;
 import com.google.android.gms.maps.GoogleMap;
 import android.content.Intent;
+import android.widget.Toast;
 
 public class MainActivity extends Activity {
     Intent myIntent;
@@ -30,8 +31,8 @@ public class MainActivity extends Activity {
         myIntent=new Intent(this,MyLocation.class);
         startActivity(myIntent);
     }
-    public void goToCreateAccount(View v){
-        myIntent=new Intent(this,CreateAccount.class);
+    public void goToAlarmSound(View v){
+        myIntent=new Intent(this,AlarmSound.class);
         startActivity(myIntent);
     }
     public void goToMessageHistory(View v){
@@ -45,6 +46,12 @@ public class MainActivity extends Activity {
     public void goToAlertSetting(View v){
         myIntent= new Intent(this,AlertSetting.class);
         startActivity(myIntent);
+    }
+    public void goToDangerAlarm(View v){
+        //This function is to flash in flash out
+        //To send mass messages
+        //To make alarm sound
+        Toast.makeText(this,"You just pressed the dangerous button ",Toast.LENGTH_SHORT).show();
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
