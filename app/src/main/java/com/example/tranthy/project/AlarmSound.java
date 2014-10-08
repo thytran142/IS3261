@@ -1,5 +1,5 @@
 package com.example.tranthy.project;
-/* This class is to create the account so user can have passcode every time they enter this class*/
+/* This class is to handle the alert setting: such as sound, email, sms, priority...*/
 import android.app.Activity;
 import android.os.Bundle;
 import android.app.ActionBar;
@@ -7,16 +7,17 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.content.Intent;
-public class CreateAccount extends Activity {
+//This class is to handle and choose the alarm sound the user wants
+public class AlarmSound extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.create_account);
+        setContentView(R.layout.alarm_sound);
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         MenuInflater inflater=getMenuInflater();
-        inflater.inflate(R.menu.create_account_actions,menu);
+        inflater.inflate(R.menu.alert_setting_actions,menu);
         return true;
     }
     @Override

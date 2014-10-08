@@ -43,15 +43,15 @@ tools:context=".MainActivity">
     android:layout_below="@+id/linearLayout1">
 
     <Button
-        android:id="@+id/btn_goToCreateAccount"
+        android:id="@+id/btn_goToAlarmSound"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight=".5"
         android:drawableLeft="@drawable/ic_action_new"
         android:textSize="12dp"
         android:gravity="center_vertical|right"
-        android:onClick="goToCreateAccount"
-        android:text="@string/create_account"/>
+        android:onClick="goToAlarmSound"
+        android:text="@string/alarm_sound"/>
     <Button
         android:id="@+id/btn_goToMessageHistory"
         android:layout_width="0dp"
@@ -93,6 +93,26 @@ tools:context=".MainActivity">
         android:textSize="12dp"
         android:onClick="goToAlertSetting"
         android:text="@string/alert_setting"/>
+
+</LinearLayout>
+
+<LinearLayout
+    android:id="@+id/linearLayout4"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentRight="true"
+    android:layout_below="@+id/linearLayout3">
+   <Button
+       android:id="@+id/btn_goToDanger"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:layout_marginTop="10dp"
+       android:text="@string/danger"
+       android:onClick="goToDangerAlarm"
+       android:background="@color/common_signin_btn_default_background">
+
+       </Button>
 
 </LinearLayout>
 
