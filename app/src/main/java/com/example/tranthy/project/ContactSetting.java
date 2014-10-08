@@ -135,6 +135,8 @@ public class ContactSetting extends FragmentActivity
 
     }
 
+    public void test(){}
+
 
 }
 
