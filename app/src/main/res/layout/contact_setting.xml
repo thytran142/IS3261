@@ -87,36 +87,28 @@
         android:layout_height="match_parent"
         android:orientation="vertical" >
 
-
-
         <LinearLayout
             android:id="@+id/subButton"
-            android:layout_width="match_parent"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:paddingTop="@dimen/activity_vertical_margin">
+            android:paddingTop="5dp">
 
-        <Button
-            android:id="@+id/addSelected"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight=".5"
-            android:text="@string/add_selected"
-            android:onClick="Add Contact"/>
         <Button
             android:id="@+id/backMain"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight=".5"
+            android:layout_weight="1"
             android:text="@string/backToMain"
             android:onClick="showMainContact"/>
         </LinearLayout>
 
         <ListView
-            android:id="@+id/contactslist"
+            android:id="@+id/localContact"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
-            android:layout_below="@id/subButton">
+            android:layout_below="@id/subButton"
+
+            >
         </ListView>
 
 

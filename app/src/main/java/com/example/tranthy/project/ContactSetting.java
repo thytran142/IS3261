@@ -1,7 +1,9 @@
 package com.example.tranthy.project;
 /* This class is to hanle the list of contacts user add to sms or email*/
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.ContentResolver;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.app.ActionBar;
@@ -16,12 +18,15 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import com.example.tranthy.project.AddManuallyContact.AddManuallyContactInterface;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
 //Import library for the dialog
 public class ContactSetting extends FragmentActivity
@@ -34,22 +39,56 @@ public class ContactSetting extends FragmentActivity
     RelativeLayout subContact;
     ListView contactList;
     ArrayAdapter adapter;
+    String selected;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.contact_setting);
         //populate the arraylist
         getContacts();
-        contactList = (ListView) findViewById(R.id.contactslist);
-        adapter = new ArrayAdapter(this, android.R.layout.simple_selectable_list_item, stringList);
+        contactList = (ListView) findViewById(R.id.localContact);
+        adapter = new ArrayAdapter(this, R.layout.customtextview, stringList);
         contactList.setAdapter(adapter);
+
+
+
         //disable the subcontact view
-        mainContact = (RelativeLayout)findViewById(R.id.mainContact);
-        subContact = (RelativeLayout)findViewById(R.id.subContact);
+        mainContact = (RelativeLayout) findViewById(R.id.mainContact);
+        subContact = (RelativeLayout) findViewById(R.id.subContact);
         subContact.setVisibility(View.GONE);
 
+        //creating confirmation/alert dialog
+        final AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+        alertDialog.setTitle("Confirmation");
+        alertDialog.setMessage("Do you want to add this contact?");
+        alertDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.cancel();
+            }
+        });
+        alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                String[] contact = selected.split("\\s*:\\s*");
+                Toast.makeText(getBaseContext(), contact[0] + " - " +contact[1], Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+
+
+
+        //item listener for the local contact list
+        contactList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                selected = ((TextView) view).getText().toString();
+                alertDialog.show();
+            }
+        });
     }
+
     public void showAddManuallyDialog(View view){
         showAddManually();
     }
@@ -108,9 +147,10 @@ public class ContactSetting extends FragmentActivity
                         String number = pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
                         //testing toast message
                         //Toast.makeText(this,"ID : "+id+ ", NAME : "+name+ ", NUMBER : "+number ,Toast.LENGTH_SHORT).show();
-
-                        String mergeInfo = name.toUpperCase() + " : "+ number;
-                        stringList.add(mergeInfo);
+                        if(number.length()>1) {
+                            String mergeInfo = name.toUpperCase() + " : " + number;
+                            stringList.add(mergeInfo);
+                        }
                     }
                     pCur.close();
                 }
@@ -124,7 +164,6 @@ public class ContactSetting extends FragmentActivity
     }
     //switch between view
     public void showSubContact(View view){
-
         mainContact.setVisibility(View.GONE);
         subContact.setVisibility(View.VISIBLE);
     }
@@ -135,7 +174,8 @@ public class ContactSetting extends FragmentActivity
 
     }
 
-    public void test(){}
+
+
 
 
 }
