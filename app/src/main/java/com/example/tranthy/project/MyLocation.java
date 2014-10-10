@@ -2,6 +2,7 @@ package com.example.tranthy.project;
 /*This class is finished. However, how to output the string of the user' location, and when user turn off, needs to pass the data
 to the activity main so they will inform the contact list of user */
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
@@ -25,6 +26,7 @@ import android.location.LocationManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,10 +41,13 @@ public class MyLocation extends Activity {
     private GoogleMap map;
     TextView current_latitude;
     TextView current_longitude;
+    TextView loading_text;
+
     Button getButton;
     String addressText;
     Boolean locationEnabled;
-    private ProgressBar progress_spinner;
+
+    private ProgressDialog progressDialog;
     private LocationManager locationManager;
     private LocationListener locationListener;
     @Override
@@ -51,9 +56,9 @@ public class MyLocation extends Activity {
         setContentView(R.layout.my_location);
         current_latitude = (TextView)findViewById(R.id.current_latitude);
         current_longitude = (TextView)findViewById(R.id.current_longitude);
-        progress_spinner = (ProgressBar)findViewById(R.id.progress_location);
         getButton = (Button)findViewById(R.id.getButton);
-        progress_spinner.setVisibility(View.GONE);
+
+
         //declare the map part
         //find the fragment which brings id map to contain the map
         //map=((MapFragment)getFragmentManager().findFragmentById(R.id.map)).getMap();
@@ -89,8 +94,8 @@ public class MyLocation extends Activity {
 
 
     public void getCurrentLocation(View view){
-        getButton.setClickable(false);
-        progress_spinner.setVisibility(View.VISIBLE);
+        progressDialog = ProgressDialog.show(this, "", "Retrieving");
+
 
             locationManager=(LocationManager)this.getSystemService(Context.LOCATION_SERVICE);
             //Defines a listener that responds to location updates
@@ -146,8 +151,7 @@ public class MyLocation extends Activity {
                                 // The country of the address
                                 address.getCountryName());
                         Toast.makeText(getBaseContext(), "This is your address - " + addressText, Toast.LENGTH_LONG).show();
-                        progress_spinner.setVisibility(View.GONE);
-                        getButton.setClickable(true);
+                        progressDialog.hide();
                         locationManager.removeUpdates(locationListener);
                     }
 
