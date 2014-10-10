@@ -25,5 +25,9 @@
     <string name="add_selected">Add Selected</string>
     <string name="alarm_sound">Alarm Sound</string>
     <string name="danger">Danger</string>
+    <string name="location_title">Location Information</string>
+    <string name="latitude_txt">Current Latitude : </string>
+    <string name="longitude_txt">Current Longitude : </string>
+    <string name="getMyLocation">Get Current Location</string>
 
 </resources>

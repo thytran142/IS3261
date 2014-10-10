@@ -22,6 +22,10 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 
 import android.location.LocationManager;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.Marker;
@@ -33,34 +37,75 @@ import java.util.Locale;
 
 public class MyLocation extends Activity {
     private GoogleMap map;
-
+    TextView current_latitude;
+    TextView current_longitude;
+    Button getButton;
     String addressText;
+    Boolean locationEnabled;
+    private ProgressBar progress_spinner;
+    private LocationManager locationManager;
+    private LocationListener locationListener;
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.my_location);
-
+        current_latitude = (TextView)findViewById(R.id.current_latitude);
+        current_longitude = (TextView)findViewById(R.id.current_longitude);
+        progress_spinner = (ProgressBar)findViewById(R.id.progress_location);
+        getButton = (Button)findViewById(R.id.getButton);
+        progress_spinner.setVisibility(View.GONE);
         //declare the map part
         //find the fragment which brings id map to contain the map
-        map=((MapFragment)getFragmentManager().findFragmentById(R.id.map)).getMap();
+        //map=((MapFragment)getFragmentManager().findFragmentById(R.id.map)).getMap();
         //Android API allows a way to check if the user has disabled location services
-        Boolean locationEnabled;
+
         LocationManager manager=(LocationManager)this.getSystemService(Context.LOCATION_SERVICE);
         if(!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)&& !manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)){
             locationEnabled=false;
             Toast.makeText(this,"Enable location services for accurate data",Toast.LENGTH_SHORT).show();
         }
         else locationEnabled=true;
-        if(locationEnabled){
-            LocationManager locationManager=(LocationManager)this.getSystemService(Context.LOCATION_SERVICE);
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater inflater=getMenuInflater();
+        inflater.inflate(R.menu.my_location_actions,menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+
+    }
+
+
+    public void getCurrentLocation(View view){
+        getButton.setClickable(false);
+        progress_spinner.setVisibility(View.VISIBLE);
+
+            locationManager=(LocationManager)this.getSystemService(Context.LOCATION_SERVICE);
             //Defines a listener that responds to location updates
-            LocationListener locationListener=new LocationListener() {
+            locationListener=new LocationListener() {
                 @Override
                 public void onLocationChanged(Location location) {
                     LatLng latLng=new LatLng(location.getLatitude(),location.getLongitude());
-                    Marker currentLoc=map.addMarker(new MarkerOptions().position(latLng).title("Current Location").snippet("This is where you are right now").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_action_place)));
-                    map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,30));
-                    map.animateCamera(CameraUpdateFactory.zoomTo(30),2000,null);
+                    Double lat = location.getLatitude();
+                    Double lon = location.getLongitude();
+
+                    current_latitude.setText(lat.toString());
+                    current_longitude.setText(lon.toString());
+                    //Marker currentLoc=map.addMarker(new MarkerOptions().position(latLng).title("Current Location").snippet("This is where you are right now").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_action_place)));
+                    //map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,30));
+                    //map.animateCamera(CameraUpdateFactory.zoomTo(30),2000,null);
 
 
                     Geocoder geocoder = new Geocoder(getApplicationContext(),Locale.getDefault());
@@ -87,7 +132,7 @@ public class MyLocation extends Activity {
                     }
 
                     // If the reverse geocode returned an address
-                        if (addresses != null && addresses.size() > 0) {
+                    if (addresses != null && addresses.size() > 0) {
                         // Get the first address
                         Address address = addresses.get(0);
 
@@ -101,6 +146,9 @@ public class MyLocation extends Activity {
                                 // The country of the address
                                 address.getCountryName());
                         Toast.makeText(getBaseContext(), "This is your address - " + addressText, Toast.LENGTH_LONG).show();
+                        progress_spinner.setVisibility(View.GONE);
+                        getButton.setClickable(true);
+                        locationManager.removeUpdates(locationListener);
                     }
 
                 }
@@ -115,25 +163,30 @@ public class MyLocation extends Activity {
                 public void onProviderDisabled(String s) {}
             };
             locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,0,0,locationListener);
-        }//end locationEnable
+
+
+
+        //end locationEnable
+
+
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu){
-        MenuInflater inflater=getMenuInflater();
-        inflater.inflate(R.menu.my_location_actions,menu);
-        return true;
+    protected void onPause() {
+        super.onPause();
+        try {
+            //locationManager.removeUpdates(locationListener);
+        }catch(Exception ex){}
     }
+
     @Override
-    public boolean onOptionsItemSelected(MenuItem item){
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+    public void onResume()
+    {
+        super.onResume();
+        try{
+
+
+        }catch(Exception ex){}
 
     }
 }
