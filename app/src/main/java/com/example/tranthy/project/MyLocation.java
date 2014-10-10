@@ -41,7 +41,7 @@ public class MyLocation extends Activity {
     private GoogleMap map;
     TextView current_latitude;
     TextView current_longitude;
-    TextView loading_text;
+
 
     Button getButton;
     String addressText;
@@ -94,7 +94,10 @@ public class MyLocation extends Activity {
 
 
     public void getCurrentLocation(View view){
-        progressDialog = ProgressDialog.show(this, "", "Retrieving");
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Location Information");
+        progressDialog.setMessage("Retrieving");
+        progressDialog.show();
 
 
             locationManager=(LocationManager)this.getSystemService(Context.LOCATION_SERVICE);
@@ -102,7 +105,7 @@ public class MyLocation extends Activity {
             locationListener=new LocationListener() {
                 @Override
                 public void onLocationChanged(Location location) {
-                    LatLng latLng=new LatLng(location.getLatitude(),location.getLongitude());
+
                     Double lat = location.getLatitude();
                     Double lon = location.getLongitude();
 
@@ -175,24 +178,7 @@ public class MyLocation extends Activity {
 
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        try {
-            //locationManager.removeUpdates(locationListener);
-        }catch(Exception ex){}
-    }
 
-    @Override
-    public void onResume()
-    {
-        super.onResume();
-        try{
-
-
-        }catch(Exception ex){}
-
-    }
 }
 
 

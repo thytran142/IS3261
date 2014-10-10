@@ -4,6 +4,7 @@ package com.example.tranthy.project;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,10 +18,12 @@ import android.view.View;
 import com.google.android.gms.maps.GoogleMap;
 import android.content.Intent;
 import android.widget.Toast;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 
 public class MainActivity extends Activity {
     Intent myIntent;
-
+    private MediaPlayer mediaPlayer;
 
     //Declare function intent here
     public void goToContactSetting(View v){
@@ -32,8 +35,16 @@ public class MainActivity extends Activity {
         startActivity(myIntent);
     }
     public void goToAlarmSound(View v){
-        myIntent=new Intent(this,AlarmSound.class);
-        startActivity(myIntent);
+        if(mediaPlayer.isPlaying()){mediaPlayer.pause();}
+        else {
+            AudioManager audio = (AudioManager) this.getSystemService(this.AUDIO_SERVICE);
+            int max = audio.getStreamMaxVolume(AudioManager.STREAM_NOTIFICATION);
+            audio.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+            audio.setStreamVolume(AudioManager.STREAM_RING, max, AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE);
+            mediaPlayer.start();
+            mediaPlayer.setLooping(true);
+        }
+
     }
     public void goToMessageHistory(View v){
         myIntent=new Intent(this,MessageHistory.class);
@@ -57,6 +68,8 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mediaPlayer = MediaPlayer.create(this, R.raw.alarm_danger);
+
 
 
     }
