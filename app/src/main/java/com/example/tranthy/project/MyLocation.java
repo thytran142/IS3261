@@ -24,7 +24,9 @@ import com.google.android.gms.maps.model.LatLng;
 
 import android.location.LocationManager;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -34,6 +36,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -45,7 +48,10 @@ public class MyLocation extends Activity {
 
     Button getButton;
     String addressText;
-    Boolean locationEnabled;
+    private Boolean locationEnabled;
+    private ListView address_list;
+    ArrayAdapter adapter;
+    ArrayList<String> stringList = new ArrayList<String>();
 
     private ProgressDialog progressDialog;
     private LocationManager locationManager;
@@ -56,6 +62,7 @@ public class MyLocation extends Activity {
         setContentView(R.layout.my_location);
         current_latitude = (TextView)findViewById(R.id.current_latitude);
         current_longitude = (TextView)findViewById(R.id.current_longitude);
+        address_list = (ListView)findViewById(R.id.address_result);
         getButton = (Button)findViewById(R.id.getButton);
 
 
@@ -94,10 +101,16 @@ public class MyLocation extends Activity {
 
 
     public void getCurrentLocation(View view){
+
+
         progressDialog = new ProgressDialog(this);
-        progressDialog.setTitle("Location Information");
-        progressDialog.setMessage("Retrieving");
+        progressDialog.setMessage("Retrieving Location Information");
         progressDialog.show();
+
+        stringList.removeAll(stringList);
+        adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,stringList);
+        address_list.setAdapter(adapter);
+
 
 
             locationManager=(LocationManager)this.getSystemService(Context.LOCATION_SERVICE);
@@ -111,16 +124,13 @@ public class MyLocation extends Activity {
 
                     current_latitude.setText(lat.toString());
                     current_longitude.setText(lon.toString());
-                    //Marker currentLoc=map.addMarker(new MarkerOptions().position(latLng).title("Current Location").snippet("This is where you are right now").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_action_place)));
-                    //map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,30));
-                    //map.animateCamera(CameraUpdateFactory.zoomTo(30),2000,null);
 
 
                     Geocoder geocoder = new Geocoder(getApplicationContext(),Locale.getDefault());
                     // Create a list to contain the result address
                     List<Address> addresses = null;
                     try {
-                        //get 3 address
+                        //get 3 addresses
                         addresses = geocoder.getFromLocation(location.getLatitude(),
                                 location.getLongitude(), 3);
                     } catch (IOException e1) {
@@ -142,18 +152,21 @@ public class MyLocation extends Activity {
                     // If the reverse geocode returned an address
                     if (addresses != null && addresses.size() > 0) {
                         // Get the first address
-                        Address address = addresses.get(0);
+                        for(int x =0;x<addresses.size();x++) {
+                            Address address = addresses.get(x);
 
-                        addressText = String.format(
-                                "%s, %s, %s",
-                                // If there's a street address, add it
-                                address.getMaxAddressLineIndex() > 0 ?
-                                        address.getAddressLine(0) : "",
-                                // Locality is usually a city
-                                address.getLocality(),
-                                // The country of the address
-                                address.getCountryName());
-                        Toast.makeText(getBaseContext(), "This is your address - " + addressText, Toast.LENGTH_LONG).show();
+                            addressText = String.format(
+                                    "%s, %s, %s",
+                                    // If there's a street address, add it
+                                    address.getMaxAddressLineIndex() > 0 ?
+                                            address.getAddressLine(0) : "",
+                                    // Locality is usually a city
+                                    address.getLocality(),
+                                    // The country of the address
+                                    address.getCountryName());
+                            stringList.add(addressText);
+                        }
+
                         progressDialog.hide();
                         locationManager.removeUpdates(locationListener);
                     }
@@ -170,6 +183,8 @@ public class MyLocation extends Activity {
                 public void onProviderDisabled(String s) {}
             };
             locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,0,0,locationListener);
+            adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,stringList);
+            address_list.setAdapter(adapter);
 
 
 

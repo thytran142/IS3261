@@ -30,5 +30,6 @@
     <string name="longitude_txt">Current Longitude : </string>
     <string name="getMyLocation">Get Current Location</string>
     <string name="loading">Loading...</string>
+    <string name="result_title">Estimated Address Results</string>
 
 </resources>
