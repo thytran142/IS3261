@@ -1,17 +1,41 @@
 package com.example.tranthy.project;
 /* This class is to handle the alert setting: such as sound, email, sms, priority...*/
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.app.ActionBar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.content.Intent;
+import android.view.View;
+import android.widget.Toast;
+
 public class AlertSetting extends Activity {
+
+    private PendingIntent pendingIntent;
+    private Intent ScheduleIntent;
+    private IntentFilter myIntentFilter;
+    private AlarmManager manager;
+    private ScheduleReceiver receiver = new ScheduleReceiver();
+
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.alert_setting);
+
+        // Retrieve a PendingIntent that will perform a broadcast
+        ScheduleIntent = new Intent(this, ScheduleReceiver.class);
+        pendingIntent = PendingIntent.getBroadcast(this, 0, ScheduleIntent, 0);
+        manager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+        int interval = 10000;
+        manager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), interval, pendingIntent);
+
+
+
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
@@ -31,6 +55,26 @@ public class AlertSetting extends Activity {
         return super.onOptionsItemSelected(item);
 
     }
+
+    public void startAlarm(View view) {
+
+
+        manager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+        int interval = 10000;
+
+        manager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), interval, pendingIntent);
+        //Toast.makeText(this, "Alarm Set", Toast.LENGTH_SHORT).show();
+
+    }
+
+    public void cancelAlarm(View view) {
+        if (manager != null) {
+            manager.cancel(pendingIntent);
+            Toast.makeText(this, "Alarm Canceled", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
 }
 
 
