@@ -149,11 +149,18 @@
             android:background="@android:color/transparent" />
         <Button
             android:id="@+id/getButton"
-
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/getMyLocation"
             android:onClick="getCurrentLocation"/>
+
+        <Button
+            android:id="@+id/sendButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Send SMS"
+            android:onClick="sendSMS"
+            />
 
     </LinearLayout>
 

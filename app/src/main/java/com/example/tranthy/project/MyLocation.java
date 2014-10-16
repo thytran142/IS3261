@@ -10,6 +10,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
 import android.app.ActionBar;
+import android.telephony.SmsManager;
 import android.text.format.Time;
 import android.util.Log;
 import android.view.Menu;
@@ -50,7 +51,8 @@ public class MyLocation extends Activity {
     TextView address_result;
 
     Button getButton;
-    String addressText;
+    private Time today;
+    private String addressText = null;
     private Boolean locationEnabled;
 
     private ArrayList<String> stringList = new ArrayList<String>();
@@ -66,12 +68,6 @@ public class MyLocation extends Activity {
         current_longitude = (TextView)findViewById(R.id.current_longitude);
         address_result = (TextView)findViewById(R.id.address_result);
         getButton = (Button)findViewById(R.id.getButton);
-
-
-        //declare the map part
-        //find the fragment which brings id map to contain the map
-        //map=((MapFragment)getFragmentManager().findFragmentById(R.id.map)).getMap();
-        //Android API allows a way to check if the user has disabled location services
 
         LocationManager manager=(LocationManager)this.getSystemService(Context.LOCATION_SERVICE);
         if(!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)&& !manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)){
@@ -100,15 +96,26 @@ public class MyLocation extends Activity {
         return super.onOptionsItemSelected(item);
 
     }
+    public void sendSMS(View view){
 
+        if(addressText != null) {
+            SmsManager sms = SmsManager.getDefault();
+            sms.sendTextMessage("90104024",
+                    null, "Sending SMS to you Programmatically! " + addressText + " - " + today.toString().substring(0, 13), null, null);
+        }
+        else{Toast.makeText(this, "no address how to send sia", Toast.LENGTH_LONG).show();}
+    }
 
     public void getCurrentLocation(View view){
 
         requestLocation();
 
-        Time today = new Time(Time.getCurrentTimezone());
+        today = new Time(Time.getCurrentTimezone());
         today.setToNow();
         Toast.makeText(this, today.toString().substring(0,13), Toast.LENGTH_LONG).show();
+
+
+
 
     }
 
