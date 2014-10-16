@@ -29,7 +29,13 @@
     <string name="latitude_txt">Current Latitude : </string>
     <string name="longitude_txt">Current Longitude : </string>
     <string name="getMyLocation">Get Current Location</string>
-    <string name="loading">Loading...</string>
-    <string name="result_title">Estimated Address Results</string>
+    <string name="result_title">Estimated Current Address</string>
+
+    <!--Message History xml string value-->
+    <string name="msgHistory">Message History</string>
+    <string name="msgID">ID</string>
+    <string name="receiver">Receiver</string>
+    <string name="message">Message</string>
+    <string name="time">Timestamp</string>
 
 </resources>

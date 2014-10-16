@@ -145,8 +145,6 @@ public class ContactSetting extends FragmentActivity
                     while (pCur.moveToNext()) {
 
                         String number = pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-                        //testing toast message
-                        //Toast.makeText(this,"ID : "+id+ ", NAME : "+name+ ", NUMBER : "+number ,Toast.LENGTH_SHORT).show();
                         if(number.length()>1) {
                             String mergeInfo = name.toUpperCase() + " : " + number;
                             stringList.add(mergeInfo);

@@ -1,6 +1,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    android:layout_width="fill_parent"
     android:layout_height="match_parent"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -10,12 +10,14 @@
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/location_layout1"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:gravity="center"
         >
     <TextView
+        android:textStyle="bold"
+        android:textSize="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/location_title"
@@ -25,7 +27,7 @@
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/location_layout2"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:gravity="left"
@@ -34,17 +36,19 @@
         android:paddingBottom="@dimen/activity_horizontal_margin">
      <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/sublayout1"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center">
     <TextView
+        android:textSize="16dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight=".1"
         android:text="@string/latitude_txt"
         />
     <TextView
+        android:textSize="16dp"
         android:id="@+id/current_latitude"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -54,32 +58,44 @@
      </LinearLayout>
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/sublayout2"
-            android:layout_width="match_parent"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center"
             android:paddingTop="@dimen/activity_horizontal_margin"
             android:paddingBottom="@dimen/activity_horizontal_margin">
             <TextView
+                android:textSize="16dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight=".1"
                 android:text="@string/longitude_txt"
                 />
             <TextView
+                android:textSize="16dp"
                 android:id="@+id/current_longitude"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight=".9"
                 />
 
+
+
         </LinearLayout>
-
-
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:background="@android:color/transparent" />
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/black" />
 
     </LinearLayout>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    <LinearLayout
+
         android:paddingBottom="@dimen/activity_vertical_margin"
         android:id="@+id/location_layout3"
         android:layout_width="match_parent"
@@ -87,7 +103,50 @@
         android:orientation="vertical"
         android:gravity="center"
         android:layout_below="@+id/location_layout2">
+        <TextView
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            android:id="@+id/address_result_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/result_title"
+            android:textStyle="bold"
+            android:textSize="20dp"
 
+            />
+        <TextView
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            android:id="@+id/address_result"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16dp"
+            android:layout_below="@+id/address_result_title">
+
+            </TextView>
+
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/black" />
+
+
+    </LinearLayout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:id="@+id/location_layout4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_below="@+id/location_layout3">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@android:color/transparent" />
         <Button
             android:id="@+id/getButton"
 
@@ -95,42 +154,6 @@
             android:layout_height="wrap_content"
             android:text="@string/getMyLocation"
             android:onClick="getCurrentLocation"/>
-        <View
-
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@android:color/black" />
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingBottom="@dimen/activity_vertical_margin"
-        android:paddingTop="@dimen/activity_vertical_margin"
-        android:id="@+id/location_layout4"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:layout_below="@+id/location_layout3">
-        <TextView
-            android:id="@+id/address_result_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/result_title"
-            android:textStyle="bold"
-            android:textSize="20dp"
-            />
-        <ListView
-            android:paddingBottom="@dimen/activity_vertical_margin"
-            android:paddingTop="@dimen/activity_vertical_margin"
-            android:id="@+id/address_result"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/address_result_title">
-
-            </ListView>
 
     </LinearLayout>
 
