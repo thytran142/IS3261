@@ -99,9 +99,9 @@ public class MyLocation extends Activity {
     public void sendSMS(View view){
 
         if(addressText != null) {
-            SmsManager sms = SmsManager.getDefault();
-            sms.sendTextMessage("90104024",
-                    null, "Sending SMS to you Programmatically! " + addressText + " - " + today.toString().substring(0, 13), null, null);
+            //SmsManager sms = SmsManager.getDefault();
+            //sms.sendTextMessage("90104024",
+                    //null, "Sending SMS to you Programmatically! " + addressText + " - " + today.toString().substring(0, 13), null, null);
         }
         else{Toast.makeText(this, "no address how to send sia", Toast.LENGTH_LONG).show();}
     }
