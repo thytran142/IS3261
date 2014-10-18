@@ -20,6 +20,7 @@ import com.example.tranthy.project.AddManuallyContact.AddManuallyContactInterfac
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -106,6 +107,8 @@ public class ContactSetting extends FragmentActivity
         addManuallyContact.show(getFragmentManager(),"input dialog");
     }
 
+
+
     public void addContacts(String name, String number, String email) throws SQLException{
         db.open();
         long id = db.insertContacts(name, number,email);
@@ -130,24 +133,57 @@ public class ContactSetting extends FragmentActivity
         db.close();
         return contacts;
     }
+
     //insert contacts added into table
-    public void insertRow(long rowId,String name,String number,String email){
+    public void insertRow(final long rowId, final String name, final String number, final String email){
         ViewGroup table=(ViewGroup)findViewById(R.id.table_contact);
+
         TableRow newRow=new TableRow(table.getContext());
-        TextView idText=new TextView(newRow.getContext());
+        newRow.setId((int) rowId);
         TextView nameText=new TextView(newRow.getContext());
         TextView numberText=new TextView(newRow.getContext());
-        TextView emailText=new TextView(newRow.getContext());
-        nameText.setText(String.valueOf(name));
+         nameText.setText(String.valueOf(name));
         nameText.setLayoutParams(new TableRow.LayoutParams(0,LinearLayout.LayoutParams.MATCH_PARENT,0.4f));
         nameText.setGravity(Gravity.CENTER);
+
         numberText.setText(String.valueOf(number));
-        numberText.setLayoutParams(new TableRow.LayoutParams(0,LinearLayout.LayoutParams.MATCH_PARENT,0.4f));
+        numberText.setLayoutParams(new TableRow.LayoutParams(0,LinearLayout.LayoutParams.MATCH_PARENT,0.3f));
         numberText.setGravity(Gravity.CENTER);
+
+        //add delete button dynamically
+        Button btn=new Button(this);
+        btn.setText("Delete");
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    View row=(View)view.getParent();
+                    ViewGroup container=((ViewGroup)row.getParent());
+                    container.removeView(row);
+                    container.invalidate();
+
+                    deleteContact(rowId);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+       // newRow.addView(idText);
         newRow.addView(nameText);
         newRow.addView(numberText);
+        newRow.addView(btn);
         table.addView(newRow);
     }
+    //delete row in the table when you delete the contact
+
+    public void deleteContact(long rowId) throws SQLException{
+            db.open();
+            if(db.deleteContact(rowId))
+                Toast.makeText(this,"Delete successful",Toast.LENGTH_LONG).show();
+            else
+                Toast.makeText(this,"Delete failed",Toast.LENGTH_LONG).show();
+            db.close();
+  }
 
     @Override
     public void submitContact(String name, String number, String email) throws SQLException{

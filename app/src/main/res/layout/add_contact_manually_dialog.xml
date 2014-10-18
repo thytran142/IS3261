@@ -24,6 +24,15 @@
                  android:imeOptions="actionNext"/><!--This is to next field when type enter-->
         </TableRow>
         <TableRow>
+            <TextView
+                android:id="@+id/nameError"
+                android:textColor="#B40404"
+                android:textStyle="bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+            />
+        </TableRow>
+        <TableRow>
            <TextView
                android:text="Number"
                android:width="120dp"/>
@@ -33,6 +42,15 @@
                 android:inputType="phone"
                 android:imeOptions="actionNext"/>
         </TableRow>
+          <TableRow>
+            <TextView
+            android:id="@+id/phoneError"
+            android:textColor="#B40404"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+    </TableRow>
         <TableRow>
             <TextView
                 android:text="Email"
@@ -43,12 +61,28 @@
                 android:inputType="textEmailAddress"
                 android:imeOptions="actionDone"/>
         </TableRow>
+    <TableRow>
+        <TextView
+            android:id="@+id/emailError"
+            android:textColor="#B40404"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+    </TableRow>
+    <TableRow>
+        <Button
+            android:id="@+id/btn_Cancel_Manually"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Cancel"/>
+        <Button
+            android:id="@+id/btn_Done"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Done"/>
 
+    </TableRow>
 
-    <Button
-        android:id="@+id/btn_Done"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Done"/>
 
 </TableLayout>
