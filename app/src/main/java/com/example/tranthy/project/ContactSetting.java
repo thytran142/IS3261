@@ -24,16 +24,19 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import android.widget.TableRow;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
+import android.view.ViewGroup;
+import android.view.Gravity;
+import android.widget.LinearLayout;
 //Import library for the dialog
 public class ContactSetting extends FragmentActivity
         implements AddManuallyContactInterface
 {
 
-
+    contact_list db;
     ArrayList<String> stringList = new ArrayList<String>();
     RelativeLayout mainContact;
     RelativeLayout subContact;
@@ -44,21 +47,28 @@ public class ContactSetting extends FragmentActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.contact_setting);
+        db=new contact_list(this);
+        //get the array of contacts already added
+        ArrayList<String[]> contacts=null;
+        try{
+            contacts=getAllContactsAdded();
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        for (int i = 0; i < contacts.size(); i++) {
+            String[] contact = contacts.get(i);
+            insertRow(Integer.parseInt(contact[0]), contact[1], contact[2],contact[3]);
+        }
         //populate the arraylist
         getContacts();
         contactList = (ListView) findViewById(R.id.localContact);
         adapter = new ArrayAdapter(this, R.layout.customtextview, stringList);
         contactList.setAdapter(adapter);
-
-
-
-        //disable the subcontact view
+         //disable the subcontact view
         mainContact = (RelativeLayout) findViewById(R.id.mainContact);
         subContact = (RelativeLayout) findViewById(R.id.subContact);
         subContact.setVisibility(View.GONE);
-
         //creating confirmation/alert dialog
         final AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
         alertDialog.setTitle("Confirmation");
@@ -74,10 +84,6 @@ public class ContactSetting extends FragmentActivity
                 Toast.makeText(getBaseContext(), contact[0] + " - " +contact[1], Toast.LENGTH_SHORT).show();
             }
         });
-
-
-
-
 
         //item listener for the local contact list
         contactList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -96,16 +102,60 @@ public class ContactSetting extends FragmentActivity
         FragmentManager fragmentManager=getSupportFragmentManager();
         AddManuallyContact addManuallyContact=new AddManuallyContact();
         addManuallyContact.setCancelable(false);
-        addManuallyContact.setDialogTitle("Add Manually");
+        addManuallyContact.setDialogTitle("Add contact manually");
         addManuallyContact.show(getFragmentManager(),"input dialog");
     }
 
+    public void addContacts(String name, String number, String email) throws SQLException{
+        db.open();
+        long id = db.insertContacts(name, number,email);
+        if (id > 0) {
+            Toast.makeText(this, "Add successful.", Toast.LENGTH_LONG).show();
+
+            insertRow(id, name, number,email);
+        } else Toast.makeText(this, "Add failed", Toast.LENGTH_LONG).show();
+        db.close();
+    }
+    public ArrayList<String[]> getAllContactsAdded() throws SQLException{
+        db.open();
+        Cursor c = db.getAllContacts();
+        ArrayList<String[]> contacts = new ArrayList<String[]>();
+        if (c.moveToFirst()) {
+            do {
+                String[] contact = {c.getString(0), c.getString(1), c.getString(2),c.getString(3)};
+                contacts.add(contact);
+            } while (c.moveToNext());
+
+        }
+        db.close();
+        return contacts;
+    }
+    //insert contacts added into table
+    public void insertRow(long rowId,String name,String number,String email){
+        ViewGroup table=(ViewGroup)findViewById(R.id.table_contact);
+        TableRow newRow=new TableRow(table.getContext());
+        TextView idText=new TextView(newRow.getContext());
+        TextView nameText=new TextView(newRow.getContext());
+        TextView numberText=new TextView(newRow.getContext());
+        TextView emailText=new TextView(newRow.getContext());
+        nameText.setText(String.valueOf(name));
+        nameText.setLayoutParams(new TableRow.LayoutParams(0,LinearLayout.LayoutParams.MATCH_PARENT,0.4f));
+        nameText.setGravity(Gravity.CENTER);
+        numberText.setText(String.valueOf(number));
+        numberText.setLayoutParams(new TableRow.LayoutParams(0,LinearLayout.LayoutParams.MATCH_PARENT,0.4f));
+        numberText.setGravity(Gravity.CENTER);
+        newRow.addView(nameText);
+        newRow.addView(numberText);
+        table.addView(newRow);
+    }
 
     @Override
-    public void onFinishInputDialog(String inputText){
+    public void submitContact(String name, String number, String email) throws SQLException{
         //testing
-        Toast.makeText(this,"Returned from dialog: "+inputText,Toast.LENGTH_SHORT).show();
+       // Toast.makeText(this,"Returned from dialog: "+name + ", "+number+", "+email,Toast.LENGTH_SHORT).show();
+        addContacts(name,number,email);
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         MenuInflater inflater=getMenuInflater();

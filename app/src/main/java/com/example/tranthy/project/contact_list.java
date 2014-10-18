@@ -26,8 +26,9 @@ public class contact_list {
     public void close(){
         DBHelper.close();
     }
+
     //Insert a contact into the database
-    public long insertContact(String name, String number,String email){
+    public long insertContacts(String name, String number,String email){
         ContentValues initialValues=new ContentValues();
         initialValues.put(contact_list_Helper.COLUMN_NAME_CONTACTNAME,name);
         initialValues.put(contact_list_Helper.COLUMN_NAME_CONTACTNUMBER,number);
@@ -67,4 +68,5 @@ public class contact_list {
         initialValues.put(contact_list_Helper.COLUMN_NAME_CONTACTEMAIL,email);
         return db.update(contact_list_Helper.TABLE_NAME,initialValues,contact_list_Helper.COLUMN_NAME_ID+"="+rowId,null)>0;
     }
+
 }
