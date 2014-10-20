@@ -66,7 +66,22 @@ public class contact_list {
         initialValues.put(contact_list_Helper.COLUMN_NAME_CONTACTNAME,name);
         initialValues.put(contact_list_Helper.COLUMN_NAME_CONTACTNUMBER,number);
         initialValues.put(contact_list_Helper.COLUMN_NAME_CONTACTEMAIL,email);
-        return db.update(contact_list_Helper.TABLE_NAME,initialValues,contact_list_Helper.COLUMN_NAME_ID+"="+rowId,null)>0;
+        return db.update(contact_list_Helper.TABLE_NAME,initialValues,contact_list_Helper.COLUMN_NAME_ID+"="+rowId,null)!=0;
     }
-
+    //update a contact name
+    public boolean updateContactName(long rowId,String newName){
+        ContentValues initialValues= new ContentValues();
+        initialValues.put(contact_list_Helper.COLUMN_NAME_CONTACTNAME,newName);
+        return db.update(contact_list_Helper.TABLE_NAME,initialValues,contact_list_Helper.COLUMN_NAME_ID+"="+rowId,null)!=0;
+    }
+    public boolean updateContactNumber(long rowId,String newNumber){
+        ContentValues initialValues= new ContentValues();
+        initialValues.put(contact_list_Helper.COLUMN_NAME_CONTACTNUMBER,newNumber);
+        return db.update(contact_list_Helper.TABLE_NAME,initialValues,contact_list_Helper.COLUMN_NAME_ID+"="+rowId,null)!=0;
+    }
+    public boolean updateContactEmail(long rowId,String newEmail){
+        ContentValues initialValues= new ContentValues();
+        initialValues.put(contact_list_Helper.COLUMN_NAME_CONTACTEMAIL,newEmail);
+        return db.update(contact_list_Helper.TABLE_NAME,initialValues,contact_list_Helper.COLUMN_NAME_ID+"="+rowId,null)!=0;
+    }
 }

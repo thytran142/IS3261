@@ -46,7 +46,8 @@ public class ContactSetting extends FragmentActivity
     ListView contactList;
     ArrayAdapter adapter;
     String selected;
-
+    Cursor cursor;
+    Intent myIntent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -149,7 +150,6 @@ public class ContactSetting extends FragmentActivity
     //insert contacts added into table
     public void insertRow(final long rowId, final String name, final String number, final String email){
         ViewGroup table=(ViewGroup)findViewById(R.id.table_contact);
-
         TableRow newRow=new TableRow(table.getContext());
         newRow.setId((int) rowId);
         TextView nameText=new TextView(newRow.getContext());
@@ -162,46 +162,7 @@ public class ContactSetting extends FragmentActivity
         numberText.setLayoutParams(new TableRow.LayoutParams(0,LinearLayout.LayoutParams.MATCH_PARENT,0.3f));
         numberText.setGravity(Gravity.CENTER);
 
-        //add delete button dynamically
-        Button btn=new Button(this);
-        btn.setText("Delete");
-        btn.setTextSize(12);
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View view) {
-             //confirm before delete
-             AlertDialog.Builder alertDialog2 = new AlertDialog.Builder( ContactSetting.this);
-             // Setting Dialog Title
-              alertDialog2.setTitle("Confirmation");
-             // Setting Dialog Message
-              alertDialog2.setMessage("Are you sure you want delete this contact?");
-            // Setting Positive "Yes" Btn
-              alertDialog2.setPositiveButton("YES",
-               new DialogInterface.OnClickListener() {
-               public void onClick(DialogInterface dialog, int which) {
-                //yes to delete the contact
-                   try {
-                       View row=(View)view.getParent();
-                       ViewGroup container=((ViewGroup)row.getParent());
-                       container.removeView(row);
-                       container.invalidate();
-                       deleteContact(rowId);
-                   } catch (SQLException e) {
-                       e.printStackTrace();
-                   }
-               }
-               });
-             // Setting Negative "NO" Btn
-              alertDialog2.setNegativeButton("NO",
-               new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-               }
-              });
-             // Showing Alert Dialog
-             alertDialog2.show();
-           }
-        });
+
         Button btnEdit=new Button(this);
         btnEdit.setText("Edit");
         btnEdit.setTextSize(12);
@@ -209,12 +170,13 @@ public class ContactSetting extends FragmentActivity
          @Override
           public void onClick(final View view) {
              showEditContact(rowId);
+
+
            }
          });
        // newRow.addView(idText);
         newRow.addView(nameText);
         newRow.addView(numberText);
-        newRow.addView(btn);
         newRow.addView(btnEdit);
         table.addView(newRow);
 
@@ -229,20 +191,63 @@ public class ContactSetting extends FragmentActivity
                 Toast.makeText(this,"Delete failed",Toast.LENGTH_SHORT).show();
             db.close();
         }
+    @Override
+    public void deleteThisContact(long rowId) throws SQLException{
+        deleteContact(rowId);
+        ViewGroup table=(ViewGroup)findViewById(R.id.table_contact);
+        TableRow row=(TableRow)table.findViewById((int) rowId);
+
+        table.removeView(row);
+        table.invalidate();
+
+    }
     public void UpdateContact(long rowId,String name, String number,String email) throws SQLException{
              db.open();
              if(db.updateContact(rowId,name,number,email)) {
                  Toast.makeText(this, "Update successful", Toast.LENGTH_SHORT).show();
-                 //do I need to change the content in the table?
-
-
-             }
+              }
              else
                  Toast.makeText(this,"Update failed.",Toast.LENGTH_SHORT).show();
              db.close();
 
          }
-
+    public void UpdateContactName(long rowId, String newName) throws SQLException{
+        db.open();
+        if(db.updateContactName(rowId, newName)) {
+            Toast.makeText(this, "Update successful", Toast.LENGTH_SHORT).show();
+           // ViewGroup table=(ViewGroup)findViewById(R.id.table_contact);
+          //  TableRow newRow=(TableRow)table.findViewById((int) rowId);
+         //   TextView nameText=(TextView)newRow.findViewById(R.id.txt_contact_name);
+         //   nameText.setText(newName);
+            myIntent=new Intent(this,ContactSetting.class);
+            startActivity(myIntent);
+        }
+        else
+            Toast.makeText(this,"Update failed.",Toast.LENGTH_SHORT).show();
+        db.close();
+    }
+    public void UpdateContactNumber(long rowId,String newNumber) throws SQLException{
+        db.open();
+        if(db.updateContactNumber(rowId, newNumber)) {
+            Toast.makeText(this, "Update successful", Toast.LENGTH_SHORT).show();
+            //ViewGroup table=(ViewGroup)findViewById(R.id.table_contact);
+            //TableRow newRow=(TableRow)table.findViewById((int) rowId);
+            //TextView nameText=(TextView)newRow.findViewById(R.id.txt_phone_number);
+            //nameText.setText(newNumber);
+        }
+        else
+            Toast.makeText(this,"Update failed.",Toast.LENGTH_SHORT).show();
+        db.close();
+    }
+    public void UpdateContactEmail(long rowId,String newNumber) throws SQLException{
+        db.open();
+        if(db.updateContactEmail(rowId, newNumber)) {
+            Toast.makeText(this, "Update successful", Toast.LENGTH_SHORT).show();
+        }
+        else
+            Toast.makeText(this,"Update failed.",Toast.LENGTH_SHORT).show();
+        db.close();
+    }
     @Override
          public void submitContact(String name, String number, String email) throws SQLException{
              //testing
@@ -251,9 +256,20 @@ public class ContactSetting extends FragmentActivity
          }
     @Override
          public void editContact(long rowId,String name, String number, String email) throws SQLException{
+
              UpdateContact(rowId,name,number,email);
          }
+    @Override
+        public void editContactName(long rowId,String newName) throws SQLException {
+        UpdateContactName(rowId,newName);
+    }
+    @Override
+        public void editContactNumber(long rowId,String newNumber) throws SQLException
 
+    {UpdateContactNumber(rowId,newNumber);}
+    @Override
+        public void editContactEmail(long rowId,String newEmail)throws SQLException
+    { UpdateContactEmail(rowId,newEmail);}
     @Override
          public boolean onCreateOptionsMenu(Menu menu){
              MenuInflater inflater=getMenuInflater();

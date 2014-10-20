@@ -9,14 +9,7 @@
                        android:layout_height="wrap_content"
                        android:layout_alignParentLeft="true"
                        android:paddingTop="@dimen/activity_vertical_margin">
-                       <Button
-                           android:id="@+id/btn_back"
-                           android:layout_width="0dp"
-                           android:layout_height="wrap_content"
-                           android:layout_weight=".2"
-                           android:text="@string/back"
-                           android:textSize="12sp"
-                        />
+
                        <TextView
                            android:layout_weight="0.6"
                            android:layout_width="0dp"
@@ -24,14 +17,7 @@
                            android:gravity="center"
                            android:textSize="25dp"
                            android:layout_height="wrap_content" />
-                       <Button
-                           android:id="@+id/btn_save"
-                           android:layout_width="0dp"
-                           android:layout_height="wrap_content"
-                           android:layout_weight=".2"
-                           android:text="@string/save"
-                           android:textSize="12sp"
-                           />
+
                    </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
@@ -62,6 +48,7 @@
 
         android:background="#DADADC" ></View>
     <LinearLayout
+        android:id="@+id/linearList"
         android:layout_below="@+id/linearTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -70,6 +57,30 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
         </LinearLayout>
+    <LinearLayout
+        android:layout_below="@+id/linearList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp">
+        <Button
+            android:id="@+id/btn_back"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:text="@string/close"
+            android:textSize="12sp"
 
+            />
+        <Button
+            android:id="@+id/btn_delete"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:text="@string/delete"
+            android:textSize="12sp"
+
+         ></Button>
+
+     </LinearLayout>
 
 </RelativeLayout>
