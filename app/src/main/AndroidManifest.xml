@@ -20,12 +20,9 @@
 
     <!--Schedule Receiver -->
     <receiver android:name=".ScheduleReceiver">
-
-
-     <intent>
-        <action android:name="ScheduleIntent"
-                android:process=":remote"/>
-    </intent>
+     <intent-filter>
+        <action android:name="Send_INFO_MSG"/>
+    </intent-filter>
 
     </receiver>
 

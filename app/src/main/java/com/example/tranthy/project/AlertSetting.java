@@ -28,11 +28,10 @@ public class AlertSetting extends Activity {
         setContentView(R.layout.alert_setting);
 
         // Retrieve a PendingIntent that will perform a broadcast
-        ScheduleIntent = new Intent(this, ScheduleReceiver.class);
-        pendingIntent = PendingIntent.getBroadcast(this, 0, ScheduleIntent, 0);
+        registerReceiver(receiver, new IntentFilter("Send_INFO_MSG") );
+        pendingIntent = PendingIntent.getBroadcast(this, 0, new Intent("Send_INFO_MSG"), 0);
         manager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-        int interval = 10000;
-        manager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), interval, pendingIntent);
+
 
 
 
