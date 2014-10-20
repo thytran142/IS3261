@@ -234,6 +234,8 @@ public class ContactSetting extends FragmentActivity
              if(db.updateContact(rowId,name,number,email)) {
                  Toast.makeText(this, "Update successful", Toast.LENGTH_SHORT).show();
                  //do I need to change the content in the table?
+
+
              }
              else
                  Toast.makeText(this,"Update failed.",Toast.LENGTH_SHORT).show();
