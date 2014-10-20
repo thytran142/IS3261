@@ -30,7 +30,10 @@
     <string name="longitude_txt">Current Longitude : </string>
     <string name="getMyLocation">Get Current Location</string>
     <string name="result_title">Estimated Current Address</string>
-
+    <string name="back">Back</string>
+    <string name="save">Save</string>
+    <string name="listTitle">Profile details</string>
+    <string name="editTitle">Edit Contact</string>
     <!--Message History xml string value-->
     <string name="msgHistory">Message History</string>
     <string name="msgID">ID</string>

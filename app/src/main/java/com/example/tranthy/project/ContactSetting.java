@@ -36,7 +36,7 @@ import android.content.DialogInterface;
 import android.view.ViewGroup.LayoutParams;
 //Import library for the dialog
 public class ContactSetting extends FragmentActivity
-        implements AddManuallyContactInterface
+        implements AddManuallyContactInterface,EditContact.EditContactInterface
 {
 
     contact_list db;
@@ -109,9 +109,15 @@ public class ContactSetting extends FragmentActivity
         addManuallyContact.show(getFragmentManager(),"input dialog");
     }
 
-    public void showEditContact(){
+    public void showEditContact(Long rowId){
         FragmentManager fragmentManager=getSupportFragmentManager();
-
+        EditContact editContact = new EditContact();
+        editContact.setCancelable(false);
+        Bundle args= new Bundle();
+        args.putLong("key", rowId);
+        editContact.setArguments(args);
+        editContact.setDialogTitle("Edit contact");
+        editContact.show(getFragmentManager(), "input dialog");
     }
 
 
@@ -202,7 +208,7 @@ public class ContactSetting extends FragmentActivity
         btnEdit.setOnClickListener(new View.OnClickListener() {
          @Override
           public void onClick(final View view) {
-             showEditContact();
+             showEditContact(rowId);
            }
          });
        // newRow.addView(idText);
@@ -223,36 +229,47 @@ public class ContactSetting extends FragmentActivity
                 Toast.makeText(this,"Delete failed",Toast.LENGTH_SHORT).show();
             db.close();
         }
+    public void UpdateContact(long rowId,String name, String number,String email) throws SQLException{
+             db.open();
+             if(db.updateContact(rowId,name,number,email)) {
+                 Toast.makeText(this, "Update successful", Toast.LENGTH_SHORT).show();
+                 //do I need to change the content in the table?
+             }
+             else
+                 Toast.makeText(this,"Update failed.",Toast.LENGTH_SHORT).show();
+             db.close();
 
-
-
-
+         }
 
     @Override
-    public void submitContact(String name, String number, String email) throws SQLException{
-        //testing
-       // Toast.makeText(this,"Returned from dialog: "+name + ", "+number+", "+email,Toast.LENGTH_SHORT).show();
-        addContacts(name,number,email);
-    }
+         public void submitContact(String name, String number, String email) throws SQLException{
+             //testing
+            // Toast.makeText(this,"Returned from dialog: "+name + ", "+number+", "+email,Toast.LENGTH_SHORT).show();
+             addContacts(name,number,email);
+         }
+    @Override
+         public void editContact(long rowId,String name, String number, String email) throws SQLException{
+             UpdateContact(rowId,name,number,email);
+         }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu){
-        MenuInflater inflater=getMenuInflater();
-        inflater.inflate(R.menu.contact_setting_actions,menu);
-        return true;
-    }
+         public boolean onCreateOptionsMenu(Menu menu){
+             MenuInflater inflater=getMenuInflater();
+             inflater.inflate(R.menu.contact_setting_actions,menu);
+             return true;
+         }
     @Override
-    public boolean onOptionsItemSelected(MenuItem item){
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+         public boolean onOptionsItemSelected(MenuItem item){
+             // Handle action bar item clicks here. The action bar will
+             // automatically handle clicks on the Home/Up button, so long
+             // as you specify a parent activity in AndroidManifest.xml.
+             int id = item.getItemId();
+             if (id == R.id.action_settings) {
+                 return true;
+             }
+             return super.onOptionsItemSelected(item);
 
-    }
+         }
     //initial step to query all the contacts with phone number and store in arraylist
     public void getContacts(){
         ContentResolver cr = getContentResolver();
