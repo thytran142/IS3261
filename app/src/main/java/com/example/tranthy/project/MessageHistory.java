@@ -1,6 +1,8 @@
 package com.example.tranthy.project;
 /* This class is to create the account so user can have passcode every time they enter this class*/
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.app.ActionBar;
@@ -9,10 +11,12 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.content.Intent;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -25,11 +29,19 @@ public class MessageHistory extends Activity {
         super.onCreate(savedInstanceState);
         db = new MessageDB(this);
         setContentView(R.layout.message_history);
+
         ArrayList<String[]> msgHistory = GetMsgHistory();
         for (int i = 0; i < msgHistory.size(); i++) {
             String[] msg = msgHistory.get(i);
             insertRow(msg[0], msg[1], msg[2], msg[3]);
         }
+
+
+
+
+
+
+
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
@@ -92,6 +104,33 @@ public class MessageHistory extends Activity {
         newRow.addView(messageText);
         newRow.addView(timeText);
         table.addView(newRow);
+
+    }
+
+    public void clearAll(View view){
+        final Intent myIntent = new Intent(this,MessageHistory.class);
+        final AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+        alertDialog.setTitle("Confirmation");
+        alertDialog.setMessage("Do you want to clear the history?");
+        alertDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.cancel();
+            }
+        });
+        alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                db.open();
+                db.deleteMsgHistory();
+                db.close();
+                finish();
+                startActivity(myIntent);
+            }
+        });
+
+
+
+        alertDialog.show();
+
 
     }
 

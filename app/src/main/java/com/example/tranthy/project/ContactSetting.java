@@ -69,6 +69,7 @@ public class ContactSetting extends FragmentActivity
         contactList = (ListView) findViewById(R.id.localContact);
         adapter = new ArrayAdapter(this, R.layout.customtextview, stringList);
         contactList.setAdapter(adapter);
+
          //disable the subcontact view
         mainContact = (RelativeLayout) findViewById(R.id.mainContact);
         subContact = (RelativeLayout) findViewById(R.id.subContact);

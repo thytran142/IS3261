@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<TableLayout
     android:id="@+id/table"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -11,6 +16,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" >
     </TableRow>
+
     <TableRow
         android:id="@+id/tableRow2"
         android:layout_width="match_parent"
@@ -26,6 +32,12 @@
             android:textSize="28sp"
             android:textStyle="bold" >
         </TextView>
+        <Button
+            android:id="@+id/clearButton"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Clear All"
+            android:onClick="clearAll"/>
     </TableRow>
     <TableRow
         android:id="@+id/tableRow3"
@@ -66,3 +78,4 @@
         </TextView>
     </TableRow>
 </TableLayout>
+</ScrollView>

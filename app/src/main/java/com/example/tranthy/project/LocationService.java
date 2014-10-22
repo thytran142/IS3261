@@ -34,8 +34,6 @@ public class LocationService extends IntentService {
     Double longitude;
     Double latitude;
     String addressText="";
-    String lat=null;
-    String lon=null;
     private LocationManager locManager;
     LocationListener locListener;
     Location location;
@@ -121,7 +119,7 @@ public class LocationService extends IntentService {
 
         }
 
-
+        //set notification to user about the sms activity
         myNotification = new NotificationCompat.Builder(getApplicationContext())
                 .setContentTitle("Msg Sent!")
                 .setContentText("Last Known Location has been send out")
@@ -139,6 +137,7 @@ public class LocationService extends IntentService {
     }
 
     public void addMessage(String message){
+        //get the selected contact in db
         mdb.open();
         ArrayList<String[]> receivers = new ArrayList<String[]>();
         try{
@@ -146,7 +145,7 @@ public class LocationService extends IntentService {
         }catch(SQLException e){
             e.printStackTrace();
         }
-
+        //send sms to contact respectively with loop
         for(int x = 0;x<receivers.size();x++){
             String[] receiver = receivers.get(x);
             String combine = receiver[1] + ": "+receiver[2];
@@ -155,11 +154,18 @@ public class LocationService extends IntentService {
 
 
             try {
-                SmsManager sms = SmsManager.getDefault();
-                sms.sendTextMessage(receiver[2],null, "This a auto message sent by LocateMi to notify you the sender \n"+message, null, null);
-                long id = mdb.insertMsgHistory(combine,message,today.toString().substring(0, 8)+"\n"+today.toString().substring(9, 13)) ;
+                //send sms
+                //SmsManager sms = SmsManager.getDefault();
+                //sms.sendTextMessage(receiver[2],null, "This a auto message sent by LocateMi to notify you the sender \n"+message, null, null);
+                //log into message history
+                String success = "SMS has being successfully sent";
+                long id = mdb.insertMsgHistory(combine,success,today.toString().substring(0, 8)+"\n"+today.toString().substring(9, 13)) ;
 
             } catch (Exception e) {
+                //if sms fail to send
+                String error = "SMS has failed to send out";
+                //log into db
+                long id = mdb.insertMsgHistory(combine,error,today.toString().substring(0, 8)+"\n"+today.toString().substring(9, 13)) ;
                 failNotification = new NotificationCompat.Builder(getApplicationContext())
                         .setContentTitle("Sending Failed")
                         .setContentText("SMS Failed")

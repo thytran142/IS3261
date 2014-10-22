@@ -7,6 +7,7 @@
     <string name="action_settings">Settings again</string>
     <string name="title_activity_front">FrontActivity</string>
     <string name="title_activity_location">LocationActivity</string>
+
     <!--declare menu string here-->
     <string name="check_location">My location</string>
     <string name="create_account">Create account</string>
@@ -14,6 +15,7 @@
     <string name="message_setting">Message Setting</string>
     <string name="alert_setting">Alert Setting</string>
     <string name="contact_setting">Contact Setting</string>
+
     <!--declare instruction string here-->
     <string name="contact_setting_instruction">Contact Setting allows you to restrict who can receive SMS/Email about your current location.</string>
     <string name="add_manually">Add manually</string>
@@ -35,11 +37,12 @@
     <string name="listTitle">Profile details</string>
     <string name="editTitle">Edit Contact</string>
     <string name="delete">Delete</string>
+
     <!--Message History xml string value-->
     <string name="msgHistory">Message History</string>
     <string name="msgID">ID</string>
     <string name="receiver">Receiver</string>
-    <string name="message">Message</string>
+    <string name="message">Status</string>
     <string name="time">Timestamp</string>
 
 </resources>
