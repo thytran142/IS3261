@@ -154,13 +154,6 @@
             android:text="@string/getMyLocation"
             android:onClick="getCurrentLocation"/>
 
-        <Button
-            android:id="@+id/sendButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Send SMS"
-            android:onClick="sendSMS"
-            />
 
     </LinearLayout>
 

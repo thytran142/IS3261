@@ -26,6 +26,10 @@ public class MessageHistory extends Activity {
         db = new MessageDB(this);
         setContentView(R.layout.message_history);
         ArrayList<String[]> msgHistory = GetMsgHistory();
+        for (int i = 0; i < msgHistory.size(); i++) {
+            String[] msg = msgHistory.get(i);
+            insertRow(msg[0], msg[1], msg[2], msg[3]);
+        }
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
@@ -61,21 +65,13 @@ public class MessageHistory extends Activity {
         return msgHistory;
     }
 
-    public void insertRow(Long rowId,String receiver,String message, String time){
+    public void insertRow(String rowId,String receiver,String message, String time){
         ViewGroup table = (ViewGroup)findViewById(R.id.table);
         TableRow newRow = new TableRow(table.getContext());
-        TextView idText = new TextView(newRow.getContext());
+
         TextView receiverText = new TextView(newRow.getContext());
         TextView messageText = new TextView(newRow.getContext());
         TextView timeText = new TextView(newRow.getContext());
-
-        newRow.setLayoutParams(new TableRow.LayoutParams(
-                TableRow.LayoutParams.MATCH_PARENT,
-                TableRow.LayoutParams.WRAP_CONTENT));
-        idText.setText(String.valueOf(rowId));
-        idText.setLayoutParams(
-                new TableRow.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT,0.1f));
-        idText.setGravity(Gravity.CENTER);
 
         receiverText.setText(String.valueOf(receiver));
         receiverText.setLayoutParams(
@@ -84,7 +80,7 @@ public class MessageHistory extends Activity {
 
         messageText.setText(String.valueOf(message));
         messageText.setLayoutParams(
-                new TableRow.LayoutParams(0,LinearLayout.LayoutParams.MATCH_PARENT,0.4f));
+                new TableRow.LayoutParams(0,LinearLayout.LayoutParams.MATCH_PARENT,0.5f));
         messageText.setGravity(Gravity.CENTER);
 
         timeText.setText(String.valueOf(time));
@@ -92,7 +88,6 @@ public class MessageHistory extends Activity {
                 new TableRow.LayoutParams(0,LinearLayout.LayoutParams.MATCH_PARENT,0.3f));
         timeText.setGravity(Gravity.CENTER);
 
-        newRow.addView(idText);
         newRow.addView(receiverText);
         newRow.addView(messageText);
         newRow.addView(timeText);

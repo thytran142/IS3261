@@ -15,8 +15,6 @@ public class MessageDB {
     final Context context;
     MessageDB_Helper DBHelper;
     SQLiteDatabase db;
-    private String time;
-    private Timestamp timestamp;
 
     public MessageDB(Context ctx){
         this.context = ctx;
@@ -67,9 +65,8 @@ public class MessageDB {
         return mCursor;
     }
 
-    public boolean deleteMsgHistory(long rowId){
-        return db.delete(MessageDB_Helper.TABLE_NAME,
-                MessageDB_Helper.COLUMN_NAME_ID +"="+rowId,null)> 0;
+    public void deleteMsgHistory(){
+        db.delete(MessageDB_Helper.TABLE_NAME,null,null);
     }
 
     public boolean updateMsgHistory(long rowId,String receiver,String message, String time){

@@ -14,14 +14,14 @@
         android:id="@+id/button1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Start Alarm"
+        android:text="Start Alert"
         android:onClick="startAlert" />
 
     <Button
         android:id="@+id/button2"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Cancel Alarm"
+        android:text="Cancel Alert"
         android:onClick="cancelAlert" />
 
 </LinearLayout>

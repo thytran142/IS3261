@@ -18,7 +18,8 @@ public class MessageDB_Helper extends SQLiteOpenHelper {
             "CREATE TABLE "+ TABLE_NAME + "(" +
                     COLUMN_NAME_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                     COLUMN_NAME_RECEIVER + " TEXT NOT NULL," +
-                    COLUMN_NAME_MESSAGE + " TEXT NOT NULL);";
+                    COLUMN_NAME_MESSAGE + " TEXT NOT NULL," +
+                    COLUMN_NAME_TIMESTAMP + " TEXT NOT NULL);";
 
     private static final String SQL_DELETE =
             "DROP TABLE IF EXISTS " + TABLE_NAME;

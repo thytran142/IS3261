@@ -12,6 +12,11 @@ public class MessageSetting extends Activity {
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.message_setting);
+
+
+
+
+
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu){

@@ -5,6 +5,7 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -12,10 +13,14 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
+import android.telephony.SmsManager;
+import android.text.format.Time;
 import android.util.Log;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -24,6 +29,8 @@ import java.util.Locale;
  */
 public class LocationService extends IntentService {
 
+    MessageDB mdb;
+    contact_list cdb;
     Double longitude;
     Double latitude;
     String addressText="";
@@ -33,7 +40,7 @@ public class LocationService extends IntentService {
     LocationListener locListener;
     Location location;
     NotificationManager notificationManager;
-    Notification myNotification;
+    Notification myNotification, failNotification;
     public LocationService() {
         super("LocationService");
     }
@@ -41,6 +48,8 @@ public class LocationService extends IntentService {
     @Override
     public void onCreate() {
         super.onCreate();
+        mdb = new MessageDB(this);
+        cdb = new contact_list(this);
         notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
     }
 
@@ -114,18 +123,75 @@ public class LocationService extends IntentService {
 
 
         myNotification = new NotificationCompat.Builder(getApplicationContext())
-                .setContentTitle(addressText)
-                .setContentText(location.getLongitude() +", "+location.getLatitude())
+                .setContentTitle("Msg Sent!")
+                .setContentText("Last Known Location has been send out")
                 .setTicker("Notification!")
                 .setWhen(System.currentTimeMillis())
                 .setDefaults(Notification.DEFAULT_SOUND)
                 .setAutoCancel(true)
-                .setSmallIcon(R.drawable.ic_launcher)
+                .setSmallIcon(R.drawable.main_icon)
                 .build();
-
+        String message = "Last Known Location: " + addressText +"\n"+ "Lati:"
+                + location.getLatitude()+ ",Long:" + location.getLongitude();
+        addMessage(message);
         notificationManager.notify(1,myNotification);
 
+    }
 
-        //Toast.makeText(this, "Service Started by Broadcast receiver - " + addressText, Toast.LENGTH_LONG).show();
+    public void addMessage(String message){
+        mdb.open();
+        ArrayList<String[]> receivers = new ArrayList<String[]>();
+        try{
+            receivers=getAllReceivers();
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+
+        for(int x = 0;x<receivers.size();x++){
+            String[] receiver = receivers.get(x);
+            String combine = receiver[1] + ": "+receiver[2];
+            Time today = new Time(Time.getCurrentTimezone());
+            today.setToNow();
+
+
+            try {
+                SmsManager sms = SmsManager.getDefault();
+                sms.sendTextMessage(receiver[2],null, "This a auto message sent by LocateMi to notify you the sender \n"+message, null, null);
+                long id = mdb.insertMsgHistory(combine,message,today.toString().substring(0, 8)+"\n"+today.toString().substring(9, 13)) ;
+
+            } catch (Exception e) {
+                failNotification = new NotificationCompat.Builder(getApplicationContext())
+                        .setContentTitle("Sending Failed")
+                        .setContentText("SMS Failed")
+                        .setTicker("Notification!")
+                        .setWhen(System.currentTimeMillis())
+                        .setDefaults(Notification.DEFAULT_SOUND)
+                        .setAutoCancel(true)
+                        .setSmallIcon(R.drawable.main_icon)
+                        .build();
+                notificationManager.notify(1,failNotification);
+                e.printStackTrace();
+            }
+
+
+        }
+
+        mdb.close();
+
+    }
+
+    public ArrayList<String[]> getAllReceivers() throws SQLException {
+        cdb.open();
+        Cursor c = cdb.getAllContacts();
+        ArrayList<String[]> contacts = new ArrayList<String[]>();
+        if (c.moveToFirst()) {
+            do {
+                String[] contact = {c.getString(0), c.getString(1), c.getString(2),c.getString(3)};
+                contacts.add(contact);
+            } while (c.moveToNext());
+
+        }
+        cdb.close();
+        return contacts;
     }
 }
