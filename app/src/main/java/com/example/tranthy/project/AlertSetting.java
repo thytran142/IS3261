@@ -17,8 +17,8 @@ import android.widget.Toast;
 public class AlertSetting extends Activity {
 
     private PendingIntent pendingIntent;
-    private Intent ScheduleIntent;
-    private IntentFilter myIntentFilter;
+    private Intent AlertIntent;
+    private IntentFilter AlertIntentFilter;
     private AlarmManager manager;
     private ScheduleReceiver receiver = new ScheduleReceiver();
 
@@ -28,9 +28,9 @@ public class AlertSetting extends Activity {
         setContentView(R.layout.alert_setting);
 
         // Retrieve a PendingIntent that will perform a broadcast
-        registerReceiver(receiver, new IntentFilter("Send_INFO_MSG") );
-        pendingIntent = PendingIntent.getBroadcast(this, 0, new Intent("Send_INFO_MSG"), 0);
-        manager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+        registerReceiver(receiver, new IntentFilter("Send_ALERT_MSG") );
+        pendingIntent = PendingIntent.getBroadcast(this, 0, new Intent("Send_ALERT_MSG"), 0);
+
 
 
 
@@ -55,21 +55,19 @@ public class AlertSetting extends Activity {
 
     }
 
-    public void startAlarm(View view) {
-
+    public void startAlert(View view) {
 
         manager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-        int interval = 10000;
-
-        manager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), interval, pendingIntent);
-        //Toast.makeText(this, "Alarm Set", Toast.LENGTH_SHORT).show();
+        int interval = 20000;
+        manager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+interval, interval, pendingIntent);
+        Toast.makeText(this, "ALERT SET", Toast.LENGTH_SHORT).show();
 
     }
 
-    public void cancelAlarm(View view) {
+    public void cancelAlert(View view) {
         if (manager != null) {
             manager.cancel(pendingIntent);
-            Toast.makeText(this, "Alarm Canceled", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "AlERT Canceled", Toast.LENGTH_SHORT).show();
         }
     }
 

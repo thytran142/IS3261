@@ -15,13 +15,13 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="Start Alarm"
-        android:onClick="startAlarm" />
+        android:onClick="startAlert" />
 
     <Button
         android:id="@+id/button2"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="Cancel Alarm"
-        android:onClick="cancelAlarm" />
+        android:onClick="cancelAlert" />
 
 </LinearLayout>
