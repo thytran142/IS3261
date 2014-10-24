@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
+    <!--Edit Title-->
     <LinearLayout
                        android:id="@+id/linearButton"
                        android:layout_width="match_parent"
@@ -19,6 +20,8 @@
                            android:layout_height="wrap_content" />
 
                    </LinearLayout>
+    <!--end edit Title-->
+    <!--Profile detail title-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -47,6 +50,8 @@
         android:layout_alignParentBottom="true"
 
         android:background="#DADADC" ></View>
+    <!--end profile detail title-->
+    <!--edit list-->
     <LinearLayout
         android:id="@+id/linearList"
         android:layout_below="@+id/linearTitle"
@@ -57,6 +62,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
         </LinearLayout>
+    <!--end edit list-->
+    <!--message detail title-->
+
+
     <LinearLayout
         android:layout_below="@+id/linearList"
         android:layout_width="match_parent"
