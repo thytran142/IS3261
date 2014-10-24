@@ -1,7 +1,6 @@
 package com.example.tranthy.project;
 /* This class is to handle the alert setting: such as sound, email, sms, priority...*/
-import android.accounts.Account;
-import android.accounts.AccountManager;
+
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -16,6 +15,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,16 +23,18 @@ import android.widget.Toast;
 
 public class AlertSetting extends Activity implements AdapterView.OnItemSelectedListener {
 
-    private PendingIntent pendingIntent;
-    private AlarmManager manager;
-    private ScheduleReceiver receiver = new ScheduleReceiver();
-    private View background;
-    private String interval;
+    PendingIntent pendingIntent;
+    AlarmManager manager;
+    ScheduleReceiver receiver = new ScheduleReceiver();
+    View background;
+    String interval;
     Spinner intervalSpinner;
     Button activate,deactivate;
     TextView alertStatus;
+    ImageView status_image;
     Intent alertIntent;
     public static final String MY_ACTION = "ALERT_ACTIVATE";
+    IntentFilter intentFilter = new IntentFilter(MY_ACTION);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,11 +44,13 @@ public class AlertSetting extends Activity implements AdapterView.OnItemSelected
         activate = (Button)findViewById(R.id.activation);
         deactivate = (Button)findViewById(R.id.deactivation);
         alertStatus = (TextView)findViewById(R.id.alertStatus);
+        status_image = (ImageView)findViewById(R.id.status_image);
         background.setBackgroundResource(R.drawable.background3);
-        // Retrieve a PendingIntent that will perform a broadcast
         alertIntent = new Intent(MY_ACTION );
-        registerReceiver(receiver, new IntentFilter(MY_ACTION));
-        pendingIntent = PendingIntent.getBroadcast(this, 0, alertIntent, 0);
+        registerReceiver(receiver, intentFilter);
+        manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        // Retrieve a PendingIntent that will perform a broadcast
+
         //set interval spinner
         intervalSpinner = (Spinner) findViewById(R.id.interval_spinner);
         ArrayAdapter adapter = ArrayAdapter.createFromResource(this,
@@ -56,13 +60,18 @@ public class AlertSetting extends Activity implements AdapterView.OnItemSelected
         intervalSpinner.setAdapter(adapter);
         intervalSpinner.setOnItemSelectedListener(this);
 
-        boolean alarmUp = (PendingIntent.getBroadcast(this, 0,
-                alertIntent,
-                PendingIntent.FLAG_NO_CREATE) != null);
+        boolean alarmUp = (PendingIntent.getBroadcast(this, 1,
+                alertIntent,PendingIntent.FLAG_NO_CREATE) != null);
 
-    if(alarmUp){alertStatus.setText("ALERT STATUS: ON");}
+    if(alarmUp){
         intervalSpinner.setEnabled(false);
         activate.setClickable(false);
+        alertStatus.setText("ALERT STATUS: ON");
+        status_image.setBackgroundResource(R.drawable.status_on);
+    }else{
+        alertStatus.setText("ALERT STATUS: OFF");
+        status_image.setBackgroundResource(R.drawable.status_off);
+    }
 
     }
 
@@ -100,35 +109,34 @@ public class AlertSetting extends Activity implements AdapterView.OnItemSelected
 
     public void activateAlert(View view) {
 
-        manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+        pendingIntent = PendingIntent.getBroadcast(this, 1, alertIntent, 0);
         int finalInterval = Integer.parseInt(interval) * 60000 ;
         manager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + finalInterval, finalInterval, pendingIntent);
-        Toast.makeText(this, "ALERT Activated with " + finalInterval + " millisecond Interval" , Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "ALERT Activated", Toast.LENGTH_SHORT).show();
         intervalSpinner.setEnabled(false);
         activate.setClickable(false);
         deactivate.setClickable(true);
-        alertStatus.setText("ALERT STATUS: ON\nALERT INTERVAL: " + interval + " min");
+        status_image.setBackgroundResource(R.drawable.status_on);
+        alertStatus.setText("ALERT STATUS: ON");
 
     }
 
     public void deactivateAlert(View view) {
-        manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
         if (manager != null) {
+            pendingIntent = PendingIntent.getBroadcast(this, 1, alertIntent, 0);
             manager.cancel(pendingIntent);
+            pendingIntent.cancel();
+            PendingIntent.getBroadcast(this, 0, alertIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT).cancel();
             intervalSpinner.setEnabled(true);
             activate.setClickable(true);
-            Toast.makeText(this, "AlERT Deactivated", Toast.LENGTH_SHORT).show();
+            status_image.setBackgroundResource(R.drawable.status_off);
+            Toast.makeText(this, "ALERT Deactivated", Toast.LENGTH_SHORT).show();
             alertStatus.setText("ALERT STATUS: OFF");
         }
     }
-
-    public void testMail(View view) {
-        AccountManager manager = AccountManager.get(this);
-        Account[] accounts = manager.getAccountsByType("com.google");
-        Toast.makeText(this, "There are " + accounts.length +", "+accounts[0].name, Toast.LENGTH_SHORT).show();
-
-    }
-
 
 }
 
