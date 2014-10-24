@@ -53,7 +53,7 @@ public class AddManuallyContact extends DialogFragment {
         txt_contact_email=(EditText)view.findViewById(R.id.txt_contact_email);
         nameError=(TextView)view.findViewById(R.id.nameError);
         phoneError=(TextView)view.findViewById(R.id.phoneError);
-        emailError=(TextView)view.findViewById(R.id.emailError);
+
         btn=(Button)view.findViewById(R.id.btn_Done);
         //Event handler for the button
         btn.setOnClickListener(new View.OnClickListener(){
@@ -65,9 +65,7 @@ public class AddManuallyContact extends DialogFragment {
                 else if(isEmpty(txt_phone_number)){
                     phoneError.setText("This field cannot be empty!");
                 }
-                else if(isEmpty(txt_contact_email)){
-                    emailError.setText("This field cannot be empty!");
-                }
+
                 else {
                     //get the calling activity
                     AddManuallyContactInterface activity = (AddManuallyContactInterface) getActivity();

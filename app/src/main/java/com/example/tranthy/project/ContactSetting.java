@@ -214,6 +214,17 @@ public class ContactSetting extends FragmentActivity
         table.invalidate();
 
     }
+    @Override
+    public boolean hasEmail(long rowId) throws SQLException{
+        db.open();
+        Cursor c = db.getContact(rowId);
+        String email =c.getString(3);
+        db.close();
+        if(email.trim().length()>0){
+            return true;
+        }else return false;
+
+    }
     public void UpdateContact(long rowId,String name, String number,String email,String option, String message) throws SQLException{
              db.open();
              if(db.updateContact(rowId,name,number,email,option,message)) {
@@ -224,6 +235,7 @@ public class ContactSetting extends FragmentActivity
              db.close();
 
          }
+
     public void UpdateContactName(long rowId, String newName) throws SQLException{
         db.open();
         if(db.updateContactName(rowId, newName)) {

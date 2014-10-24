@@ -41,7 +41,7 @@ public class ListItemAdapter extends ArrayAdapter
             label.setText("Email");
         }
         else if(pos==3){
-            label.setText("Option");
+            label.setText("Alert options");
 
         }
         else if(pos==4){
