@@ -45,4 +45,15 @@
     <string name="message">Status</string>
     <string name="time">Timestamp</string>
 
-</resources>
+    <!--interval spinner-->
+     <string-array name="interval_array">
+            <item>1</item>
+            <item>15</item>
+            <item>30</item>
+            <item>60</item>
+            <item>90</item>
+            <item>120</item>
+     </string-array>
+    <string name="alertTitle">Select the alert interval timing</string>
+
+    </resources>

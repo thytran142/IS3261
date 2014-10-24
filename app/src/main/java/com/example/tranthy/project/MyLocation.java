@@ -59,6 +59,8 @@ public class MyLocation extends Activity {
         }
         else locationEnabled=true;
 
+
+
     }
 
     @Override
