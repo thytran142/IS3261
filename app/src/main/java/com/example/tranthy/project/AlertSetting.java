@@ -31,6 +31,8 @@ public class AlertSetting extends Activity implements AdapterView.OnItemSelected
     Spinner intervalSpinner;
     Button activate,deactivate;
     TextView alertStatus;
+    Intent alertIntent;
+    public static final String MY_ACTION = "ALERT_ACTIVATE";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,12 +42,11 @@ public class AlertSetting extends Activity implements AdapterView.OnItemSelected
         activate = (Button)findViewById(R.id.activation);
         deactivate = (Button)findViewById(R.id.deactivation);
         alertStatus = (TextView)findViewById(R.id.alertStatus);
-        deactivate.setClickable(false);
         background.setBackgroundResource(R.drawable.background3);
         // Retrieve a PendingIntent that will perform a broadcast
-        registerReceiver(receiver, new IntentFilter("Send_ALERT_MSG"));
-        pendingIntent = PendingIntent.getBroadcast(this, 0, new Intent("Send_ALERT_MSG"), 0);
-
+        alertIntent = new Intent(MY_ACTION );
+        registerReceiver(receiver, new IntentFilter(MY_ACTION));
+        pendingIntent = PendingIntent.getBroadcast(this, 0, alertIntent, 0);
         //set interval spinner
         intervalSpinner = (Spinner) findViewById(R.id.interval_spinner);
         ArrayAdapter adapter = ArrayAdapter.createFromResource(this,
@@ -54,6 +55,15 @@ public class AlertSetting extends Activity implements AdapterView.OnItemSelected
         // Apply the adapter to the spinner
         intervalSpinner.setAdapter(adapter);
         intervalSpinner.setOnItemSelectedListener(this);
+
+        boolean alarmUp = (PendingIntent.getBroadcast(this, 0,
+                alertIntent,
+                PendingIntent.FLAG_NO_CREATE) != null);
+
+    if(alarmUp){alertStatus.setText("ALERT STATUS: ON");}
+        intervalSpinner.setEnabled(false);
+        activate.setClickable(false);
+
     }
 
     public void onItemSelected(AdapterView<?> parent, View view,
@@ -93,7 +103,7 @@ public class AlertSetting extends Activity implements AdapterView.OnItemSelected
         manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         int finalInterval = Integer.parseInt(interval) * 60000 ;
         manager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + finalInterval, finalInterval, pendingIntent);
-        Toast.makeText(this, "ALERT Activated with " + finalInterval + "Interval" , Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "ALERT Activated with " + finalInterval + " millisecond Interval" , Toast.LENGTH_SHORT).show();
         intervalSpinner.setEnabled(false);
         activate.setClickable(false);
         deactivate.setClickable(true);
@@ -102,11 +112,11 @@ public class AlertSetting extends Activity implements AdapterView.OnItemSelected
     }
 
     public void deactivateAlert(View view) {
+        manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         if (manager != null) {
             manager.cancel(pendingIntent);
             intervalSpinner.setEnabled(true);
             activate.setClickable(true);
-            deactivate.setClickable(false);
             Toast.makeText(this, "AlERT Deactivated", Toast.LENGTH_SHORT).show();
             alertStatus.setText("ALERT STATUS: OFF");
         }

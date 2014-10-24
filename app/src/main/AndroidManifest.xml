@@ -87,7 +87,7 @@
         <!--Schedule Receiver -->
         <receiver android:name=".ScheduleReceiver">
             <intent-filter>
-                <action android:name="Send_INFO_MSG"/>
+                <action android:name="ALERT_ACTIVATE"/>
             </intent-filter>
         </receiver>
         <service android:enabled="true" android:name=".LocationService" />
