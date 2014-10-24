@@ -6,7 +6,6 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.app.ActionBar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -17,16 +16,15 @@ import android.widget.Toast;
 public class AlertSetting extends Activity {
 
     private PendingIntent pendingIntent;
-    private Intent AlertIntent;
-    private IntentFilter AlertIntentFilter;
     private AlarmManager manager;
     private ScheduleReceiver receiver = new ScheduleReceiver();
-
+    private View background;
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.alert_setting);
-
+        background = (View)findViewById(R.id.AlertSetting);
+        background.setBackgroundResource(R.drawable.background3);
         // Retrieve a PendingIntent that will perform a broadcast
         registerReceiver(receiver, new IntentFilter("Send_ALERT_MSG") );
         pendingIntent = PendingIntent.getBroadcast(this, 0, new Intent("Send_ALERT_MSG"), 0);

@@ -11,12 +11,11 @@ import android.widget.Toast;
  * Created by Shake on 16/10/2014.
  */
 public class ScheduleReceiver extends BroadcastReceiver {
-    private LocationManager locManager;
+
 
     @Override
     public void onReceive(Context context, Intent i) {
-        // For our recurring task, we'll just display a message
-        Toast.makeText(context, "Received Broadcast in ScheduledReceiver", Toast.LENGTH_LONG).show();
+        // this will trigger the service
         Intent locService = new Intent(context, LocationService.class);
         context.startService(locService);
     }

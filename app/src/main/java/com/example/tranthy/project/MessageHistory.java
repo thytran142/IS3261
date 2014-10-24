@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.app.ActionBar;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,21 +21,27 @@ import java.util.ArrayList;
 
 public class MessageHistory extends Activity {
     private MessageDB db;
-
+    private View background;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         db = new MessageDB(this);
         setContentView(R.layout.message_history);
+        background = (View)findViewById(R.id.MessageHistory);
+        background.setBackgroundResource(R.drawable.background1);
+
 
         ArrayList<String[]> msgHistory = GetMsgHistory();
+        //Toast msg to indicate if it is empty
+        if(msgHistory.isEmpty()){
+            Toast.makeText(this, "Message History is empty", Toast.LENGTH_SHORT).show();
+        }
+
         for (int i = 0; i < msgHistory.size(); i++) {
             String[] msg = msgHistory.get(i);
             insertRow(msg[0], msg[1], msg[2], msg[3]);
         }
-
-
 
 
 

@@ -9,14 +9,11 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
-import android.app.ActionBar;
-import android.telephony.SmsManager;
-import android.text.format.Time;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.content.Intent;
+
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -26,36 +23,23 @@ import com.google.android.gms.maps.model.LatLng;
 
 import android.location.LocationManager;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
-import java.sql.Date;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 public class MyLocation extends Activity {
-    private GoogleMap map;
+
     TextView current_latitude;
     TextView current_longitude;
     TextView address_result;
 
-    Button getButton;
-    private Time today;
     private String addressText = null;
     private Boolean locationEnabled;
 
-    private ArrayList<String> stringList = new ArrayList<String>();
 
     private ProgressDialog progressDialog;
     private LocationManager locationManager;
@@ -67,7 +51,6 @@ public class MyLocation extends Activity {
         current_latitude = (TextView)findViewById(R.id.current_latitude);
         current_longitude = (TextView)findViewById(R.id.current_longitude);
         address_result = (TextView)findViewById(R.id.address_result);
-        getButton = (Button)findViewById(R.id.getButton);
 
         LocationManager manager=(LocationManager)this.getSystemService(Context.LOCATION_SERVICE);
         if(!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)&& !manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)){
@@ -96,31 +79,15 @@ public class MyLocation extends Activity {
         return super.onOptionsItemSelected(item);
 
     }
-    public void sendSMS(View view){
-
-        if(addressText != null) {
-            //SmsManager sms = SmsManager.getDefault();
-            //sms.sendTextMessage("90104024",
-                    //null, "Sending SMS to you Programmatically! " + addressText + " - " + today.toString().substring(0, 13), null, null);
-        }
-        else{Toast.makeText(this, "no address how to send sia", Toast.LENGTH_LONG).show();}
-    }
 
     public void getCurrentLocation(View view){
 
         requestLocation();
 
-        today = new Time(Time.getCurrentTimezone());
-        today.setToNow();
-        Toast.makeText(this, today.toString().substring(0,13), Toast.LENGTH_LONG).show();
-
-
-
-
     }
 
     public void requestLocation(){
-
+        //progressDialog to disable view interaction when retrieving
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Retrieving Location Information");
         progressDialog.show();

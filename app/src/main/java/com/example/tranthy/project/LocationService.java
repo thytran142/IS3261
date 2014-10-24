@@ -154,16 +154,17 @@ public class LocationService extends IntentService {
 
 
             try {
-                //send sms
+                //-------disable for now to prevent unintentional activation-------------------------//
                 //SmsManager sms = SmsManager.getDefault();
                 //sms.sendTextMessage(receiver[2],null, "This a auto message sent by LocateMi to notify you the sender \n"+message, null, null);
                 //log into message history
-                String success = "SMS has being successfully sent";
+                //-----------------------------------------------------------------------------------//
+                String success = "SMS successfully sent";
                 long id = mdb.insertMsgHistory(combine,success,today.toString().substring(0, 8)+"\n"+today.toString().substring(9, 13)) ;
 
             } catch (Exception e) {
                 //if sms fail to send
-                String error = "SMS has failed to send out";
+                String error = "SMS failed to send out";
                 //log into db
                 long id = mdb.insertMsgHistory(combine,error,today.toString().substring(0, 8)+"\n"+today.toString().substring(9, 13)) ;
                 failNotification = new NotificationCompat.Builder(getApplicationContext())
@@ -173,7 +174,7 @@ public class LocationService extends IntentService {
                         .setWhen(System.currentTimeMillis())
                         .setDefaults(Notification.DEFAULT_SOUND)
                         .setAutoCancel(true)
-                        .setSmallIcon(R.drawable.main_icon)
+                        .setSmallIcon(android.R.drawable.ic_dialog_alert)
                         .build();
                 notificationManager.notify(1,failNotification);
                 e.printStackTrace();

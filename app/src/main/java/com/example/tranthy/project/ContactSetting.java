@@ -46,8 +46,8 @@ public class ContactSetting extends FragmentActivity
     ListView contactList;
     ArrayAdapter adapter;
     String selected;
-    Cursor cursor;
     Intent myIntent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,11 +70,15 @@ public class ContactSetting extends FragmentActivity
         adapter = new ArrayAdapter(this, R.layout.customtextview, stringList);
         contactList.setAdapter(adapter);
 
-         //disable the subcontact view
+         //disable the subcontact view on start
         mainContact = (RelativeLayout) findViewById(R.id.mainContact);
         subContact = (RelativeLayout) findViewById(R.id.subContact);
         subContact.setVisibility(View.GONE);
-        //creating confirmation/alert dialog
+
+
+//------------all methods related to add/edit contact start from here----------------------------------------------------------//
+
+        //creating confirmation/alert dialog for adding local contact
         final AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
         alertDialog.setTitle("Confirmation");
         alertDialog.setMessage("Do you want to add this contact?");
@@ -86,7 +90,15 @@ public class ContactSetting extends FragmentActivity
         alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 String[] contact = selected.split("\\s*:\\s*");
-                Toast.makeText(getBaseContext(), contact[0] + " - " +contact[1], Toast.LENGTH_SHORT).show();
+
+                try{
+                    addContacts(contact[0],contact[1],"");
+                }catch(SQLException e){
+                    e.printStackTrace();
+                }
+                subContact.setVisibility(View.GONE);
+                mainContact.setVisibility(View.VISIBLE);
+                Toast.makeText(getBaseContext(), contact[0] + " - " +contact[1]+" has been added", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -271,6 +283,11 @@ public class ContactSetting extends FragmentActivity
     @Override
         public void editContactEmail(long rowId,String newEmail)throws SQLException
     { UpdateContactEmail(rowId,newEmail);}
+
+
+//------------------------------all methods related to add/edit contact end here------------------------------------------------//
+
+
     @Override
          public boolean onCreateOptionsMenu(Menu menu){
              MenuInflater inflater=getMenuInflater();
@@ -289,6 +306,8 @@ public class ContactSetting extends FragmentActivity
              return super.onOptionsItemSelected(item);
 
          }
+
+
     //initial step to query all the contacts with phone number and store in arraylist
     public void getContacts(){
         ContentResolver cr = getContentResolver();
@@ -311,6 +330,7 @@ public class ContactSetting extends FragmentActivity
 
                         String number = pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
                         if(number.length()>1) {
+                            number = number.replaceAll("\\s+", "");
                             String mergeInfo = name.toUpperCase() + " : " + number;
                             stringList.add(mergeInfo);
                         }
