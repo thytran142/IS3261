@@ -36,11 +36,13 @@ import android.content.Intent;
      //Interface containing methods to be implemented by calling activity
      public interface EditContactInterface{
          //add functions here to be called from dialog
-         void editContact(long rowId,String name,String number, String email) throws SQLException;
+
          void editContactName(long rowId,String name) throws SQLException;
          void editContactNumber(long rowId,String number) throws SQLException;
          void editContactEmail(long rowId,String email) throws SQLException;
          void deleteThisContact(long rowId) throws SQLException;
+         void editContactOption(long rowId, String option) throws SQLException;
+         void editContactMessage(long rowId, String message) throws SQLException;
      }
      //Empty constructor required
      public EditContact(){}
@@ -57,7 +59,7 @@ import android.content.Intent;
          Cursor c=db.getContact(rowId);
          String[] contact=new String[3];
          if(c.moveToFirst()){
-             String[]temp={c.getString(1),c.getString(2),c.getString(3)};
+             String[]temp={c.getString(1),c.getString(2),c.getString(3),c.getString(4),c.getString(5)};
              contact=temp;
          }
          else
@@ -220,6 +222,10 @@ import android.content.Intent;
  // Showing Alert Dialog
                      alertDialog3.show();
                  }//end position2
+                 else if(position==3){
+
+
+                 }//end position3
              }
          });
 

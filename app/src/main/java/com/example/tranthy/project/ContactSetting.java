@@ -139,7 +139,7 @@ public class ContactSetting extends FragmentActivity
         db.open();
         long id = db.insertContacts(name, number,email);
         if (id > 0) {
-            Toast.makeText(this, "Add successful.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "You can set options of sending messages and customize message when editing the contact.", Toast.LENGTH_LONG).show();
 
             insertRow(id, name, number,email);
         } else Toast.makeText(this, "Add failed", Toast.LENGTH_LONG).show();
@@ -151,7 +151,7 @@ public class ContactSetting extends FragmentActivity
         ArrayList<String[]> contacts = new ArrayList<String[]>();
         if (c.moveToFirst()) {
             do {
-                String[] contact = {c.getString(0), c.getString(1), c.getString(2),c.getString(3)};
+                String[] contact = {c.getString(0), c.getString(1), c.getString(2),c.getString(3),c.getString(4),c.getString(5)};
                 contacts.add(contact);
             } while (c.moveToNext());
 
@@ -214,9 +214,9 @@ public class ContactSetting extends FragmentActivity
         table.invalidate();
 
     }
-    public void UpdateContact(long rowId,String name, String number,String email) throws SQLException{
+    public void UpdateContact(long rowId,String name, String number,String email,String option, String message) throws SQLException{
              db.open();
-             if(db.updateContact(rowId,name,number,email)) {
+             if(db.updateContact(rowId,name,number,email,option,message)) {
                  Toast.makeText(this, "Update successful", Toast.LENGTH_SHORT).show();
               }
              else
@@ -261,17 +261,32 @@ public class ContactSetting extends FragmentActivity
             Toast.makeText(this,"Update failed.",Toast.LENGTH_SHORT).show();
         db.close();
     }
+    public void UpdateContactOption(long rowId, String option) throws SQLException{
+        db.open();
+        if(db.updateOption(rowId, option)) {
+            Toast.makeText(this, "Update successful", Toast.LENGTH_SHORT).show();
+        }
+        else
+            Toast.makeText(this,"Update failed.",Toast.LENGTH_SHORT).show();
+        db.close();
+    }
+    public void UpdateContactMessage(long rowId, String message) throws SQLException{
+        db.open();
+        if(db.updateMessage(rowId, message)) {
+            Toast.makeText(this, "Update successful", Toast.LENGTH_SHORT).show();
+        }
+        else
+            Toast.makeText(this,"Update failed.",Toast.LENGTH_SHORT).show();
+        db.close();
+    }
     @Override
          public void submitContact(String name, String number, String email) throws SQLException{
              //testing
             // Toast.makeText(this,"Returned from dialog: "+name + ", "+number+", "+email,Toast.LENGTH_SHORT).show();
              addContacts(name,number,email);
-         }
-    @Override
-         public void editContact(long rowId,String name, String number, String email) throws SQLException{
 
-             UpdateContact(rowId,name,number,email);
          }
+
     @Override
         public void editContactName(long rowId,String newName) throws SQLException {
         UpdateContactName(rowId,newName);
@@ -288,6 +303,15 @@ public class ContactSetting extends FragmentActivity
 //------------------------------all methods related to add/edit contact end here------------------------------------------------//
 
 
+    @Override
+        public void editContactOption(long rowId, String option) throws SQLException
+    {
+        UpdateContactOption(rowId, option);
+    }
+    @Override
+        public void editContactMessage(long rowId, String message) throws SQLException{
+        UpdateContactMessage(rowId, message);
+    }
     @Override
          public boolean onCreateOptionsMenu(Menu menu){
              MenuInflater inflater=getMenuInflater();

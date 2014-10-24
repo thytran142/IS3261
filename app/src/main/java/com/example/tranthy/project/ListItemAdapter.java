@@ -40,7 +40,26 @@ public class ListItemAdapter extends ArrayAdapter
         }else if(pos==2){
             label.setText("Email");
         }
+        else if(pos==3){
+            label.setText("Option");
+
+        }
+        else if(pos==4){
+            label.setText("Message");
+        }
         TextView content=(TextView)row.findViewById(contentId);
+      if(pos==3){
+          if(items[3].equals("NO")) {
+              content.setText("No Alerts");
+          }else if(items[3].equals("BOTH")) content.setText("Alert through Email & SMS");
+          else if(items[3].equals("EMAIL")) content.setText("Alert through Email");
+          else if(items[3].equals("SMS")) content.setText("Alert through SMS");
+
+      }else if(pos==4){
+          String str=items[4].substring(0,21);
+          content.setText(str);
+      }
+        else
         content.setText(items[pos]);
         return(row);
     }

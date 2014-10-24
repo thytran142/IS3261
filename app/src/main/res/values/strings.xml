@@ -35,6 +35,7 @@
     <string name="close">close</string>
     <string name="save">Save</string>
     <string name="listTitle">Profile details</string>
+    <string name="listTitle1">Message details</string>
     <string name="editTitle">Edit Contact</string>
     <string name="delete">Delete</string>
 
