@@ -45,6 +45,7 @@ import android.content.Intent;
          void editContactOption(long rowId, String option) throws SQLException;
          void editContactMessage(long rowId, String message) throws SQLException;
          boolean hasEmail(long rowId) throws SQLException;
+         String getMessage(long rowId) throws SQLException;
      }
      //Empty constructor required
      public EditContact(){}
@@ -309,6 +310,57 @@ import android.content.Intent;
                                                      alertDialog4.show();
 
                                                  }//end position3
+                                                 else {
+                                                     if (position == 4) {
+                                                         AlertDialog.Builder alertDialog5;
+                                                         alertDialog5 = new AlertDialog.Builder(getActivity());
+                                                         alertDialog5.setTitle("Customize message");
+                                                         final EditText messageInput = new EditText(getActivity());
+                                                         EditContactInterface activity = (EditContactInterface) getActivity();
+                                                         String oldMessage="";
+                                                         try {
+                                                             oldMessage = activity.getMessage(rowId);
+                                                         } catch (SQLException e) {
+                                                             e.printStackTrace();
+                                                         }
+                                                         messageInput.setText(oldMessage);
+                                                         alertDialog5.setView(messageInput);
+                                                         alertDialog5.setPositiveButton("OK",new DialogInterface.OnClickListener() {
+                                                             public void onClick(DialogInterface dialog, int which){
+
+                                                                 String newMessage= messageInput.getText().toString();
+                                                                 if(isEmpty(messageInput)){
+                                                                     new AlertDialog.Builder(getActivity()).setTitle("Error").setMessage("The message content cannot be empty.")
+                                                                             .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                                                                 public void onClick(DialogInterface dialog, int which) {
+                                                                                     //do nothing
+                                                                                 }
+                                                                             }).show();
+                                                                 }else{
+                                                                     EditContactInterface activity = (EditContactInterface) getActivity();
+                                                                     try {
+                                                                          activity.editContactMessage(rowId,newMessage);
+                                                                     } catch (SQLException e) {
+                                                                         e.printStackTrace();
+                                                                     }
+                                                                     //cut the first 20 characters to put in the list view
+                                                                     String str=newMessage.substring(0,21);
+                                                                     TextView message = (TextView) view.findViewById(R.id.item_content);
+                                                                     message.setText(str);
+                                                                 }
+                                                             }
+                                                         });
+                                                         alertDialog5.setNegativeButton("Cancel",new DialogInterface.OnClickListener(){
+                                                             public void onClick(DialogInterface dialog, int which){
+                                                                dialog.cancel();
+                                                             }
+
+                                                         });
+                                                         alertDialog5.show();
+
+                                                     }//end position4
+                                                 }
+
                                              }//on item click for list view
                                          });
                  btn_back = (Button) view.findViewById(R.id.btn_back);

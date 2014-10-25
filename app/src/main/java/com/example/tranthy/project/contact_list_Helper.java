@@ -20,7 +20,7 @@ public class contact_list_Helper extends SQLiteOpenHelper {
             COLUMN_NAME_CONTACTNUMBER+ " TEXT NOT NULL, "+
             COLUMN_NAME_CONTACTEMAIL+ " TEXT, " +
             COLUMN_NAME_OPTION + " TEXT DEFAULT 'NO ALERT', " +
-            COLUMN_NAME_MESSAGE + " TEXT DEFAULT 'Hi, I am currently safe.Message sent from #location');";
+            COLUMN_NAME_MESSAGE + " TEXT DEFAULT 'Hi, I am LocateMi, and I am safe.');";
     // REMARK* "NO" = NO ALERT, "BOTH" email and SMS, "EMAIL" email only, "SMS" sms only
 
     private static final String SQL_DELETE="DROP TABLE IF EXISTS "+TABLE_NAME;
