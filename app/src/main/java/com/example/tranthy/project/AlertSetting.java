@@ -6,7 +6,9 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.IntentFilter;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -36,10 +38,12 @@ public class AlertSetting extends Activity implements AdapterView.OnItemSelected
     public static final String MY_ACTION = "ALERT_ACTIVATE";
     IntentFilter intentFilter = new IntentFilter(MY_ACTION);
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.alert_setting);
+
         background = (View) findViewById(R.id.AlertSetting);
         activate = (Button)findViewById(R.id.activation);
         deactivate = (Button)findViewById(R.id.deactivation);
@@ -138,7 +142,16 @@ public class AlertSetting extends Activity implements AdapterView.OnItemSelected
         }
     }
 
+
+
 }
+
+
+
+
+
+
+
 
 
 

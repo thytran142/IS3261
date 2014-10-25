@@ -11,6 +11,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.telephony.SmsManager;
@@ -35,8 +36,10 @@ public class LocationService extends IntentService {
     Double latitude;
     String addressText="";
     private LocationManager locManager;
+    myAsyncTask mailTask;
     LocationListener locListener;
     Location location;
+    String message;
     NotificationManager notificationManager;
     Notification myNotification, failNotification;
     public LocationService() {
@@ -48,6 +51,7 @@ public class LocationService extends IntentService {
         super.onCreate();
         mdb = new MessageDB(this);
         cdb = new contact_list(this);
+        mailTask = new myAsyncTask();
         notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
     }
 
@@ -129,10 +133,12 @@ public class LocationService extends IntentService {
                 .setAutoCancel(true)
                 .setSmallIcon(R.drawable.main_icon)
                 .build();
-        String message = "Last Known Location: " + addressText +"\n"+ "Lati:"
+        message = "My Last Known Location: " + addressText +"\n"+ "Lati:"
                 + location.getLatitude()+ ",Long:" + location.getLongitude();
         addMessage(message);
         notificationManager.notify(1,myNotification);
+
+        mailTask.execute();
 
     }
 
@@ -193,7 +199,7 @@ public class LocationService extends IntentService {
         ArrayList<String[]> contacts = new ArrayList<String[]>();
         if (c.moveToFirst()) {
             do {
-                String[] contact = {c.getString(0), c.getString(1), c.getString(2),c.getString(3)};
+                String[] contact = {c.getString(0), c.getString(1), c.getString(2),c.getString(3),c.getString(4),c.getString(5)};
                 contacts.add(contact);
             } while (c.moveToNext());
 
@@ -201,4 +207,66 @@ public class LocationService extends IntentService {
         cdb.close();
         return contacts;
     }
+//-----------------inner class AsyncTask for sending mail to contact----------//
+
+    class myAsyncTask extends AsyncTask<Void, Void, Void> {
+
+
+        myAsyncTask() {
+        }
+
+        // Executed on the UI thread before the
+// time taking task begins
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        // Executed on a special thread and all your
+// time taking tasks should be inside this method
+        @Override
+        protected Void doInBackground(Void... arg0) {
+            try{
+
+
+
+                ArrayList<String[]> receivers = new ArrayList<String[]>();
+                try{
+                    receivers=getAllReceivers();
+                }catch(SQLException e){
+                    e.printStackTrace();
+                }
+
+                for(int y =0;y<receivers.size();y++){
+                    String[] receiver = receivers.get(y);
+                    GMailSender sender = new GMailSender();
+                    sender.sendMail(message,receiver[3]);
+
+
+                }
+
+
+
+
+
+            }catch(Exception ex){
+                ex.printStackTrace(System.out);
+            }
+            return null;
+        }
+        // Executed on the UI thread after the
+// time taking process is completed
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+
+        }
+    }
+
+
+
 }
+
+
+
+
