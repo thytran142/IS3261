@@ -36,10 +36,11 @@ public class LocationService extends IntentService {
     Double latitude;
     String addressText="";
     private LocationManager locManager;
-    myAsyncTask mailTask;
     LocationListener locListener;
     Location location;
     String message;
+    SmsManager sms;
+    GMailSender sender;
     NotificationManager notificationManager;
     Notification myNotification, failNotification;
     public LocationService() {
@@ -51,16 +52,37 @@ public class LocationService extends IntentService {
         super.onCreate();
         mdb = new MessageDB(this);
         cdb = new contact_list(this);
-        mailTask = new myAsyncTask();
+        sms = SmsManager.getDefault();
         notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+//-------------notification builder--------------------------/
+        myNotification = new NotificationCompat.Builder(getApplicationContext())
+                .setContentTitle("Alert Sent!")
+                .setContentText("Alert has been send out")
+                .setTicker("Notification!")
+                .setWhen(System.currentTimeMillis())
+                .setDefaults(Notification.DEFAULT_SOUND)
+                .setAutoCancel(true)
+                .setSmallIcon(R.drawable.main_icon)
+                .build();
+
+        failNotification = new NotificationCompat.Builder(getApplicationContext())
+                .setContentTitle("Alert Sending Failed")
+                .setContentText("Alert Failed")
+                .setTicker("Notification!")
+                .setWhen(System.currentTimeMillis())
+                .setDefaults(Notification.DEFAULT_SOUND)
+                .setAutoCancel(true)
+                .setSmallIcon(android.R.drawable.ic_dialog_alert)
+                .build();
+
+//-------------------------------------------------------------------------------------------------//
+
     }
 
 
     @Override
     protected void onHandleIntent(Intent intent) {
         locManager=(LocationManager)this.getSystemService(Context.LOCATION_SERVICE);
-
-
         locListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
@@ -77,8 +99,9 @@ public class LocationService extends IntentService {
             public void onProviderDisabled(String s) {}
         };
 
-            locManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locListener);
-            location = locManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+
+        locManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locListener);
+        location = locManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 
 
         Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
@@ -120,76 +143,83 @@ public class LocationService extends IntentService {
                     // The country of the address
                     address.getCountryName());
 
-
         }
 
-        //set notification to user about the sms activity
-        myNotification = new NotificationCompat.Builder(getApplicationContext())
-                .setContentTitle("Msg Sent!")
-                .setContentText("Last Known Location has been send out")
-                .setTicker("Notification!")
-                .setWhen(System.currentTimeMillis())
-                .setDefaults(Notification.DEFAULT_SOUND)
-                .setAutoCancel(true)
-                .setSmallIcon(R.drawable.main_icon)
-                .build();
-        message = "My Last Known Location: " + addressText +"\n"+ "Lati:"
+        //set default message to be sent after getting the info
+        message = "This a auto message sent by LocateMi to notify you the sender Last Known Location: \n" + addressText +"\n"+ "Lati:"
                 + location.getLatitude()+ ",Long:" + location.getLongitude();
-        addMessage(message);
-        notificationManager.notify(1,myNotification);
 
-        mailTask.execute();
 
-    }
 
-    public void addMessage(String message){
-        //get the selected contact in db
-        mdb.open();
+        //Obtain all the receivers info
         ArrayList<String[]> receivers = new ArrayList<String[]>();
         try{
             receivers=getAllReceivers();
         }catch(SQLException e){
             e.printStackTrace();
         }
-        //send sms to contact respectively with loop
+        //for loop for operation
         for(int x = 0;x<receivers.size();x++){
+            Log.e("Size of detected receivers",""+receivers.size());
             String[] receiver = receivers.get(x);
-            String combine = receiver[1] + ": "+receiver[2];
+            String combine = receiver[1]+"\n"+receiver[2];
             Time today = new Time(Time.getCurrentTimezone());
             today.setToNow();
+            mdb.open();
 
-
-            try {
-                //-------disable for now to prevent unintentional activation-------------------------//
-                //SmsManager sms = SmsManager.getDefault();
-                //sms.sendTextMessage(receiver[2],null, "This a auto message sent by LocateMi to notify you the sender \n"+message, null, null);
-                //log into message history
-                //-----------------------------------------------------------------------------------//
-                String success = "SMS successfully sent";
-                long id = mdb.insertMsgHistory(combine,success,today.toString().substring(0, 8)+"\n"+today.toString().substring(9, 13)) ;
-
-            } catch (Exception e) {
-                //if sms fail to send
-                String error = "SMS failed to send out";
-                //log into db
-                long id = mdb.insertMsgHistory(combine,error,today.toString().substring(0, 8)+"\n"+today.toString().substring(9, 13)) ;
-                failNotification = new NotificationCompat.Builder(getApplicationContext())
-                        .setContentTitle("Sending Failed")
-                        .setContentText("SMS Failed")
-                        .setTicker("Notification!")
-                        .setWhen(System.currentTimeMillis())
-                        .setDefaults(Notification.DEFAULT_SOUND)
-                        .setAutoCancel(true)
-                        .setSmallIcon(android.R.drawable.ic_dialog_alert)
-                        .build();
-                notificationManager.notify(1,failNotification);
-                e.printStackTrace();
+            if(receiver[4].equals("BOTH")){
+                sendByEMAIL(receiver[1],receiver[3],receiver[5],today);
+                sendBySMS(receiver[1],receiver[2],receiver[5],today);
+            }
+            else if(receiver[4].equals("SMS")){
+                sendBySMS(receiver[1],receiver[2],receiver[5],today);
+            }
+            else if(receiver[4].equals("EMAIL")) {
+                sendByEMAIL(receiver[1], receiver[3], receiver[5], today);
             }
 
-
         }
-
         mdb.close();
+        locManager.removeUpdates(locListener);
+        notificationManager.notify(1,myNotification);
+
+
+    }
+
+    public void sendBySMS(String name,String number, String addition,Time time){
+            try {
+                SmsManager sms = SmsManager.getDefault();
+                sms.sendTextMessage(number,null, addition, null, null);
+                String success = "SMS Sent";
+                long id = mdb.insertMsgHistory(name + "\n" + number, success, time.toString().substring(0, 8) + "\n" + time.toString().substring(9, 13)) ;
+
+
+
+            } catch (Exception e) {
+                notificationManager.notify(1,failNotification);
+                //if sms fail to send
+                String error = "SMS Failed";
+                //log into db
+                long id = mdb.insertMsgHistory(name, error, time.toString().substring(0, 8) + "\n" + time.toString().substring(9, 13)) ;
+                Log.e("SMS FAIL", e.toString());
+            }
+    }
+
+    public void sendByEMAIL(String name, String email, String addition, Time time){
+        try {
+            sender = new GMailSender();
+            sender.sendMail(message+"\n"+addition,email);
+            String success = "EMAIL Sent";
+            long id = mdb.insertMsgHistory(name,success,time.toString().substring(0, 8)+"\n"+time.toString().substring(9, 13)) ;
+
+        } catch (Exception e) {
+            notificationManager.notify(1,failNotification);
+            //if fail to send
+            String error = "EMAIL Failed";
+            //log into db
+            long id = mdb.insertMsgHistory(name,error,time.toString().substring(0, 8)+"\n"+time.toString().substring(9, 13)) ;
+            Log.e("EMAIL FAIL", e.toString());
+        }
 
     }
 
@@ -207,62 +237,6 @@ public class LocationService extends IntentService {
         cdb.close();
         return contacts;
     }
-//-----------------inner class AsyncTask for sending mail to contact----------//
-
-    class myAsyncTask extends AsyncTask<Void, Void, Void> {
-
-
-        myAsyncTask() {
-        }
-
-        // Executed on the UI thread before the
-// time taking task begins
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        // Executed on a special thread and all your
-// time taking tasks should be inside this method
-        @Override
-        protected Void doInBackground(Void... arg0) {
-            try{
-
-
-
-                ArrayList<String[]> receivers = new ArrayList<String[]>();
-                try{
-                    receivers=getAllReceivers();
-                }catch(SQLException e){
-                    e.printStackTrace();
-                }
-
-                for(int y =0;y<receivers.size();y++){
-                    String[] receiver = receivers.get(y);
-                    GMailSender sender = new GMailSender();
-                    sender.sendMail(message,receiver[3]);
-
-
-                }
-
-
-
-
-
-            }catch(Exception ex){
-                ex.printStackTrace(System.out);
-            }
-            return null;
-        }
-        // Executed on the UI thread after the
-// time taking process is completed
-        @Override
-        protected void onPostExecute(Void result) {
-            super.onPostExecute(result);
-
-        }
-    }
-
 
 
 }

@@ -51,7 +51,7 @@ public class AlertSetting extends Activity implements AdapterView.OnItemSelected
         status_image = (ImageView)findViewById(R.id.status_image);
         background.setBackgroundResource(R.drawable.background3);
         alertIntent = new Intent(MY_ACTION );
-        registerReceiver(receiver, intentFilter);
+        //registerReceiver(receiver, intentFilter);
         manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         // Retrieve a PendingIntent that will perform a broadcast
 
@@ -116,7 +116,7 @@ public class AlertSetting extends Activity implements AdapterView.OnItemSelected
 
         pendingIntent = PendingIntent.getBroadcast(this, 1, alertIntent, 0);
         int finalInterval = Integer.parseInt(interval) * 60000 ;
-        manager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + finalInterval, finalInterval, pendingIntent);
+        manager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+finalInterval, finalInterval, pendingIntent);
         Toast.makeText(this, "ALERT Activated", Toast.LENGTH_SHORT).show();
         intervalSpinner.setEnabled(false);
         activate.setClickable(false);
