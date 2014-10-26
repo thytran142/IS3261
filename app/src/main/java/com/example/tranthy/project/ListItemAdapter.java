@@ -19,7 +19,6 @@ public class ListItemAdapter extends ArrayAdapter
     ListItemAdapter(Activity context, int layoutId, int titleId, String[] items, int contentId )
     {
         super(context, layoutId, items);
-
         this.context = context;
         this.items = items;
         this.layoutId = layoutId;

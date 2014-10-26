@@ -409,7 +409,7 @@ import android.content.Intent;
 
                      }
                  });
-                 getDialog().getWindow().setSoftInputMode(LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+
                  getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
                  return view;
              }

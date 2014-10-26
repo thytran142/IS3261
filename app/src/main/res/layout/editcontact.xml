@@ -17,6 +17,7 @@
                            android:text="@string/editTitle"
                            android:gravity="center"
                            android:textSize="25dp"
+                           android:textColor="#FF3300"
                            android:layout_height="wrap_content" />
 
                    </LinearLayout>
@@ -38,6 +39,7 @@
             android:layout_marginBottom="4dp"
             android:text="@string/listTitle"
             android:textStyle="bold"
+            android:textColor="#FF3300"
             android:layout_alignParentBottom="true" />
 
         <!--  divider -->
@@ -77,8 +79,11 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
             android:text="@string/close"
+            android:background="@drawable/button"
+            android:textColor="#FFFFFF"
             android:textSize="12sp"
-
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
             />
         <Button
             android:id="@+id/btn_delete"
@@ -86,8 +91,10 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
             android:text="@string/delete"
+            android:background="@drawable/button"
+            android:textColor="#FFFFFF"
             android:textSize="12sp"
-
+            android:layout_marginRight="10dp"
          ></Button>
 
      </LinearLayout>

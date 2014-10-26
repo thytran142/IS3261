@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.app.ActionBar;
 import android.provider.ContactsContract;
@@ -21,6 +22,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -55,6 +57,7 @@ public class ContactSetting extends FragmentActivity
         db=new contact_list(this);
         //get the array of contacts already added
         ArrayList<String[]> contacts=null;
+
         try{
             contacts=getAllContactsAdded();
         }catch(SQLException e){
@@ -63,7 +66,10 @@ public class ContactSetting extends FragmentActivity
         for (int i = 0; i < contacts.size(); i++) {
             String[] contact = contacts.get(i);
             insertRow(Integer.parseInt(contact[0]), contact[1], contact[2],contact[3]);
+
         }
+
+
         //populate the arraylist
         getContacts();
         contactList = (ListView) findViewById(R.id.localContact);
@@ -131,7 +137,7 @@ public class ContactSetting extends FragmentActivity
         args.putLong("key", rowId);
         editContact.setArguments(args);
         editContact.setDialogTitle("Edit contact");
-        editContact.show(getFragmentManager(), "input dialog");
+        editContact.show(getFragmentManager(), "dialog");
     }
 
 
@@ -162,35 +168,37 @@ public class ContactSetting extends FragmentActivity
 
     //insert contacts added into table
     public void insertRow(final long rowId, final String name, final String number, final String email){
+
         ViewGroup table=(ViewGroup)findViewById(R.id.table_contact);
         TableRow newRow=new TableRow(table.getContext());
         newRow.setId((int) rowId);
         TextView nameText=new TextView(newRow.getContext());
         TextView numberText=new TextView(newRow.getContext());
+
          nameText.setText(String.valueOf(name));
         nameText.setLayoutParams(new TableRow.LayoutParams(0,LinearLayout.LayoutParams.MATCH_PARENT,0.4f));
-        nameText.setGravity(Gravity.CENTER);
 
         numberText.setText(String.valueOf(number));
         numberText.setLayoutParams(new TableRow.LayoutParams(0,LinearLayout.LayoutParams.MATCH_PARENT,0.3f));
+
+        nameText.setGravity(Gravity.CENTER);
         numberText.setGravity(Gravity.CENTER);
+        nameText.setTextSize(15);
+        numberText.setTextSize(15);
+        ImageView edit=new ImageView(this);
+        edit.setImageResource(R.drawable.edit_red);
 
-
-        Button btnEdit=new Button(this);
-        btnEdit.setText("Edit");
-        btnEdit.setTextSize(12);
-        btnEdit.setOnClickListener(new View.OnClickListener() {
-         @Override
-          public void onClick(final View view) {
-             showEditContact(rowId);
-
-
-           }
-         });
+        edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View view) {
+                showEditContact(rowId);
+}
+        });
        // newRow.addView(idText);
         newRow.addView(nameText);
         newRow.addView(numberText);
-        newRow.addView(btnEdit);
+        newRow.addView(edit);
+        newRow.setBackgroundResource(R.drawable.row);
         table.addView(newRow);
 
     }

@@ -61,36 +61,65 @@
             android:text="@string/from_contact"
             android:onClick="showSubContact"/>
         </LinearLayout>
+    <!--contact list appear here-->
+     <LinearLayout
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:id="@+id/linearContactList"
+         android:layout_marginTop="10dp"
+         android:layout_below="@+id/linearLayoutContact2">
+         <TextView
+             android:id="@+id/contactListTitle"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:gravity="center_vertical"
+             android:textSize="16dp"
+             android:layout_marginLeft="12dp"
+             android:layout_marginBottom="4dp"
+             android:text="@string/contact_title"
+             android:textStyle="bold"
+             android:layout_alignParentBottom="true" />
+     </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/linearContactListInstruct"
+            android:layout_marginTop="10dp"
+            android:layout_below="@+id/linearContactList">
+            <TextView
+                android:id="@+id/contactListInstruct"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:textSize="13dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginBottom="4dp"
+                android:text="@string/no_contact"
+                android:layout_alignParentBottom="true" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/LinearContactList1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/linearContactListInstruct">
+            <ListView
+                android:id="@+id/contactList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"></ListView>
+            </LinearLayout>
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/table_contact"
-        android:layout_below="@+id/linearLayoutContact2"
+        android:layout_below="@+id/LinearContactList1"
         android:paddingTop="@dimen/activity_vertical_margin">
-        <TableRow
-            android:id="@+id/tableTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_marginTop="4dp">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/contact_title"
-                android:textSize="20sp"/>
-        </TableRow>
+
         <TableRow
             android:id="@+id/tableRow1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:layout_marginTop="2dp">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/no_contact"
-                android:textSize="10sp"/>
-
         </TableRow>
         </TableLayout>
     </RelativeLayout>
@@ -113,7 +142,10 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/backToMain"
-            android:onClick="showMainContact"/>
+            android:onClick="showMainContact"
+            android:background="@drawable/button"
+            android:textColor="#FFFFFF"
+            />
         </LinearLayout>
 
         <ListView

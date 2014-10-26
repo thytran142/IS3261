@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -40,7 +41,7 @@ public class Help extends DialogFragment {
         });//end event handler for the button
 
         //set the title for the dialog
-        getDialog().setTitle(dialogTitle);
+        getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
       return view;
  }
 }

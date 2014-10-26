@@ -5,6 +5,7 @@ import android.support.v4.app.FragmentManager;
 import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.EditText;
 import android.view.WindowManager.LayoutParams;
 import android.widget.Button;
@@ -87,7 +88,7 @@ public class AddManuallyContact extends DialogFragment {
         txt_contact_name.requestFocus();
         getDialog().getWindow().setSoftInputMode(LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         //set the title for the dialog
-        getDialog().setTitle(dialogTitle);
+        getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 
 
         return view;
