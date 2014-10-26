@@ -41,6 +41,15 @@
     <string name="editTitle">Edit Contact</string>
     <string name="delete">Delete</string>
     <string name="emergency_contact">Emergency contacts</string>
+    <!-- Help notes-->
+    <string name="thankyou">Thank you for downloading LocateMi!</string>
+    <string name="contact_instruct">Contact Setting: For you to choose all contacts in your phone to send alert message when you are in emergency.</string>
+    <string name="location_instruct">My location: For you to check your current location which will be sent to your contacts.</string>
+    <string name="alarm_instruct">Alarm Sound: For you to spread the sound and flash out in case you need attention from people staying around you</string>
+    <string name="history_instruct">Message History: For you to check which messages had been sent out.</string>
+   <string name="country_instruct">Global SOS: For you to check SOS contacts of many countries, in case you need help in a foreign country.</string>
+   <string name="setting_instruct">Alert Setting: For you to customize your options about LocateMi.</string>
+    <string name="SOS_instruct">SOS: For you to send alert messages to all contacts which you saved in case you need all their helps.</string>
     <!--Message History xml string value-->
     <string name="msgHistory">Message History</string>
     <string name="msgID">ID</string>

@@ -2,9 +2,12 @@ package com.example.tranthy.project;
 
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -14,7 +17,8 @@ import android.widget.Toast;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 
-public class MainActivity extends Activity {
+public class MainActivity extends FragmentActivity
+        implements Help.HelpInterface{
     Intent myIntent;
     private MediaPlayer mediaPlayer;
 
@@ -52,7 +56,11 @@ public class MainActivity extends Activity {
         startActivity(myIntent);
     }
     public void goToHelp(View v){
-        Toast.makeText(this,"You just pressed help button ",Toast.LENGTH_SHORT).show();
+        FragmentManager fragmentManager=getSupportFragmentManager();
+        Help help= new Help();
+        help.setDialogTitle("Help");
+        help.setCancelable(false);
+        help.show(getFragmentManager(),"dialog");
     }
     public void goToDangerAlarm(View v){
         //This function is to flash in flash out

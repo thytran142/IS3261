@@ -31,9 +31,7 @@ public class AddManuallyContact extends DialogFragment {
  //Interface containing methods to be implemented by calling activity
     public interface AddManuallyContactInterface{
         void submitContact(String name,String number, String email) throws SQLException;
-
-
- }
+}
     //Empty constructor required
     public AddManuallyContact(){}
     public void setDialogTitle(String title){
