@@ -2,16 +2,15 @@ package com.example.tranthy.project;
 /* This class is to handle the message custom content for each person*/
 import android.app.Activity;
 import android.os.Bundle;
-import android.app.ActionBar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.content.Intent;
-public class MessageSetting extends Activity {
+
+public class EmergencyContact extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.message_setting);
+        setContentView(R.layout.emergency_contact);
 
 
 

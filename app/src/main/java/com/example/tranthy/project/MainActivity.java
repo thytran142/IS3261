@@ -3,20 +3,13 @@ package com.example.tranthy.project;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.Bundle;
-import android.provider.MediaStore;
-import android.support.v7.app.ActionBar;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.content.DialogInterface;
-import android.support.v7.app.ActionBarActivity;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.app.Activity;
+import android.view.MotionEvent;
 import android.view.View;
-import com.google.android.gms.maps.GoogleMap;
-import android.content.Intent;
+import android.widget.ImageView;
 import android.widget.Toast;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -50,13 +43,16 @@ public class MainActivity extends Activity {
         myIntent=new Intent(this,MessageHistory.class);
         startActivity(myIntent);
     }
-    public void goToMessageSetting(View v){
-        myIntent = new Intent(this,MessageSetting.class);
+    public void goToEmergencyContact(View v){
+        myIntent = new Intent(this,EmergencyContact.class);
         startActivity(myIntent);
     }
     public void goToAlertSetting(View v){
         myIntent= new Intent(this,AlertSetting.class);
         startActivity(myIntent);
+    }
+    public void goToHelp(View v){
+        Toast.makeText(this,"You just pressed help button ",Toast.LENGTH_SHORT).show();
     }
     public void goToDangerAlarm(View v){
         //This function is to flash in flash out
@@ -65,10 +61,11 @@ public class MainActivity extends Activity {
         Toast.makeText(this,"You just pressed the dangerous button ",Toast.LENGTH_SHORT).show();
     }
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mediaPlayer = MediaPlayer.create(this, R.raw.alarm_danger);
+
 
 
 
