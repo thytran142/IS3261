@@ -63,10 +63,8 @@ public class MainActivity extends FragmentActivity
         help.show(getFragmentManager(),"dialog");
     }
     public void goToDangerAlarm(View v){
-        //This function is to flash in flash out
-        //To send mass messages
-        //To make alarm sound
-        Toast.makeText(this,"You just pressed the dangerous button ",Toast.LENGTH_SHORT).show();
+        myIntent = new Intent(this, SOSActivity.class);
+        startActivity(myIntent);
     }
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
