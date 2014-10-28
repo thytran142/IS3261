@@ -1,5 +1,5 @@
 package com.example.tranthy.project;
-/* This class is to handle the alert setting: such as sound, email, sms, priority...*/
+/* This class is to handle the alert setting: email, sms, priority...*/
 
 import android.app.Activity;
 import android.app.AlarmManager;
@@ -7,6 +7,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
+import android.os.BatteryManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -27,16 +28,17 @@ public class AlertSetting extends Activity implements AdapterView.OnItemSelected
 
     PendingIntent pendingIntent;
     AlarmManager manager;
-    ScheduleReceiver receiver = new ScheduleReceiver();
     View background;
     String interval;
     Spinner intervalSpinner;
     Button activate,deactivate;
     TextView alertStatus;
+    TextView batteryText;
+    ImageView battery_image;
     ImageView status_image;
     Intent alertIntent;
     public static final String MY_ACTION = "ALERT_ACTIVATE";
-    IntentFilter intentFilter = new IntentFilter(MY_ACTION);
+
 
 
     @Override
@@ -49,11 +51,12 @@ public class AlertSetting extends Activity implements AdapterView.OnItemSelected
         deactivate = (Button)findViewById(R.id.deactivation);
         alertStatus = (TextView)findViewById(R.id.alertStatus);
         status_image = (ImageView)findViewById(R.id.status_image);
+        batteryText = (TextView)findViewById(R.id.batteryStatus);
+        battery_image = (ImageView)findViewById(R.id.battery_image);
         background.setBackgroundResource(R.drawable.background3);
         alertIntent = new Intent(MY_ACTION );
-        //registerReceiver(receiver, intentFilter);
         manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        // Retrieve a PendingIntent that will perform a broadcast
+
 
         //set interval spinner
         intervalSpinner = (Spinner) findViewById(R.id.interval_spinner);
@@ -76,6 +79,23 @@ public class AlertSetting extends Activity implements AdapterView.OnItemSelected
         alertStatus.setText("ALERT STATUS: OFF");
         status_image.setBackgroundResource(R.drawable.status_off);
     }
+        //check battery status
+        IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+        Intent batteryStatus = this.registerReceiver(null, ifilter);
+        int level = batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
+        int scale = batteryStatus.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
+
+        float batteryPct = (level / (float)scale) * 100;
+
+        if(batteryPct<=40.0){
+            battery_image.setBackgroundResource(R.drawable.warning);
+            batteryText.setText("Power is not in recommended range");
+        }
+        else{
+            battery_image.setBackgroundResource(R.drawable.ok_good);
+            batteryText.setText("Power is within recommended range");
+        }
+
 
     }
 

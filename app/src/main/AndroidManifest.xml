@@ -72,7 +72,7 @@
 
         <activity
             android:name=".MessageHistory"
-            android:label="@string/message_history"
+            android:label="@string/alert_history"
             android:parentActivityName=".MainActivity" >
         </activity>
         <activity
