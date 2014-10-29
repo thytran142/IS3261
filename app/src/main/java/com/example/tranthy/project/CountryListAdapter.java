@@ -1,12 +1,16 @@
 package com.example.tranthy.project;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.io.InputStream;
 
 public class CountryListAdapter extends ArrayAdapter<String> {
       Activity context;
@@ -31,6 +35,7 @@ public class CountryListAdapter extends ArrayAdapter<String> {
              View rowView=inflater.inflate(layoutId, null);
              ImageView imageView = (ImageView) rowView.findViewById(flag_id);
              TextView countrytext = (TextView) rowView.findViewById(country_id);
+
              imageView.setImageResource(flag[position]);
              countrytext.setText(country_name[position]);
          return rowView;

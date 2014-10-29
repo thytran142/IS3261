@@ -28,7 +28,8 @@ public class MessageHistory extends Activity {
         super.onCreate(savedInstanceState);
         db = new MessageDB(this);
         setContentView(R.layout.message_history);
-
+        background = (View)findViewById(R.id.MessageHistory);
+        background.setBackgroundResource(R.drawable.background1);
 
 
         ArrayList<String[]> msgHistory = GetMsgHistory();

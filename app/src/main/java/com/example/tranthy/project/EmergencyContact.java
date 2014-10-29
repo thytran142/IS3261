@@ -12,8 +12,24 @@ import android.widget.Toast;
 
 public class EmergencyContact extends Activity {
     ListView list;
-    String[] country_name={"Vietnam","Singapore"};
-    Integer[] flag={R.drawable.contact_red,R.drawable.edit_red};
+    String[] country_name={"Afghanistan","Bahrain","Bangladesh","Bhutan",
+            "Brunei","Cambodia","China","East Timor"
+            ,"India","Indonesia","Iran","Iraq","Israel",
+            "Japan","Jordan","North Korea","South Korea",
+            "Laos","Malaysia","Maldives","Mongolia","Myanmar",
+            "Nepal","Pakistan","The Philipines","Qatar",
+            "Russia","Saudi Arabia","Singapore","Sri Lanka",
+            "Syria","Taiwan","Thailand","Turkey","United Arab Emirates","Vietnam","Yemen"};
+    Integer[] flag={R.drawable.af,R.drawable.ba,R.drawable.bang,R.drawable.bhutan,
+            R.drawable.brunei,R.drawable.cambodia,R.drawable.china,R.drawable.timor,
+            R.drawable.india,R.drawable.indo,R.drawable.iran,R.drawable.iraq,R.drawable.isarel,
+            R.drawable.japan,R.drawable.jordan,R.drawable.north_korea,R.drawable.south_korea,
+            R.drawable.laos,R.drawable.malaysia,R.drawable.maldives,R.drawable.mongo,R.drawable.myanmar,
+            R.drawable.nepal,R.drawable.pakistan,R.drawable.philipine,R.drawable.qatar,
+            R.drawable.russia,R.drawable.saudi,R.drawable.singapore,R.drawable.sri_lanka,
+            R.drawable.syria, R.drawable.taiwan,R.drawable.thailand,R.drawable.turkey,R.drawable.arab,
+            R.drawable.vietnam,R.drawable.yemen
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
