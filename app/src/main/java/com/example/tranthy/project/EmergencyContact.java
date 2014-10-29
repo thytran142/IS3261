@@ -1,7 +1,9 @@
 package com.example.tranthy.project;
 /* This class is to handle the message custom content for each person*/
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -12,6 +14,7 @@ import android.widget.Toast;
 
 public class EmergencyContact extends Activity {
     ListView list;
+    Intent myIntent;
     String[] country_name={"Afghanistan","Bahrain","Bangladesh","Bhutan",
             "Brunei","Cambodia","China","East Timor"
             ,"India","Indonesia","Iran","Iraq","Israel",
@@ -42,7 +45,122 @@ public class EmergencyContact extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-                Toast.makeText(EmergencyContact.this, "You Clicked at " + country_name[+position], Toast.LENGTH_SHORT).show();
+              myIntent = new Intent(getApplicationContext(),CountrySOS.class);
+              switch(position){
+                  case 0:
+                        myIntent.putExtra("name","Afghanistan");
+                      break;
+                  case 1:
+                      myIntent.putExtra("name","Bahrain");
+                      break;
+                  case 2:
+                      myIntent.putExtra("name","Bangladesh");
+                      break;
+                  case 3:
+                      myIntent.putExtra("name","Bhutan");
+                      break;
+                  case 4:
+                      myIntent.putExtra("name","Brunei");
+                      break;
+                  case 5:
+                      myIntent.putExtra("name","Cambodia");
+                      break;
+                  case 6:
+                      myIntent.putExtra("name","China");
+                      break;
+                  case 7:
+                      myIntent.putExtra("name","East Timor");
+                      break;
+                  case 8:
+                      myIntent.putExtra("name","India");
+                      break;
+                  case 9:
+                      myIntent.putExtra("name","Indonesia");
+                      break;
+                  case 10:
+                      myIntent.putExtra("name","Iran");
+                      break;
+                  case 11:
+                      myIntent.putExtra("name","Iraq");
+                      break;
+                  case 12:
+                      myIntent.putExtra("name","Israel");
+                      break;
+                  case 13:
+                      myIntent.putExtra("name","Japan");
+                      break;
+                  case 14:
+                      myIntent.putExtra("name","Jordan");
+                      break;
+                  case 15:
+                      myIntent.putExtra("name","North Korea");
+                      break;
+                  case 16:
+                      myIntent.putExtra("name","South Korea");
+                      break;
+                  case 17:
+                      myIntent.putExtra("name","Laos");
+                      break;
+                  case 18:
+                      myIntent.putExtra("name","Malaysia");
+                      break;
+                  case 19:
+                      myIntent.putExtra("name","Maldives");
+                      break;
+                  case 20:
+                      myIntent.putExtra("name","Mongolia");
+                      break;
+                  case 21:
+                      myIntent.putExtra("name","Myanmar");
+                      break;
+                  case 22:
+                      myIntent.putExtra("name","Nepal");
+                      break;
+                  case 23:
+                      myIntent.putExtra("name","Pakistan");
+                      break;
+                  case 24:
+                      myIntent.putExtra("name","The Philipines");
+                      break;
+                  case 25:
+                      myIntent.putExtra("name","Qatar");
+                      break;
+                  case 26:
+                      myIntent.putExtra("name","Russia");
+                      break;
+                  case 27:
+                      myIntent.putExtra("name","Saudi Arabia");
+                      break;
+                  case 28:
+                      myIntent.putExtra("name","Singapore");
+                      break;
+                  case 29:
+                      myIntent.putExtra("name","Sri Lanka");
+                      break;
+                  case 30:
+                      myIntent.putExtra("name","Syria");
+                      break;
+                  case 31:
+                      myIntent.putExtra("name","Taiwan");
+                      break;
+                  case 32:
+                      myIntent.putExtra("name","Thailand");
+                      break;
+                  case 33:
+                      myIntent.putExtra("name","Turkey");
+                      break;
+                  case 34:
+                      myIntent.putExtra("name","United Arab Emirates");
+                      break;
+                  case 35:
+                      myIntent.putExtra("name","Vietnam");
+                      break;
+                  case 36:
+                      myIntent.putExtra("name","Yemen");
+                      break;
+             }
+
+              startActivity(myIntent);
             }
         });
  }
@@ -64,6 +182,7 @@ public class EmergencyContact extends Activity {
         return super.onOptionsItemSelected(item);
 
     }
+
 }
 
 

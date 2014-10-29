@@ -84,7 +84,11 @@
             android:parentActivityName=".MainActivity">
 
             </activity>
+        <activity android:name=".CountrySOS"
 
+            android:parentActivityName=".EmergencyContact">
+
+        </activity>
         <!--Schedule Receiver -->
         <receiver android:name=".ScheduleReceiver">
             <intent-filter>
