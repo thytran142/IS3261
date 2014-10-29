@@ -4,10 +4,15 @@ package com.example.tranthy.project;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
+import android.hardware.Camera;
+import android.hardware.Camera.Parameters;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -20,8 +25,10 @@ import android.media.MediaPlayer;
 public class MainActivity extends FragmentActivity
         implements Help.HelpInterface{
     Intent myIntent;
+    boolean flashOn;
     private MediaPlayer mediaPlayer;
-
+    Camera cam;
+    Parameters p;
     //Declare function intent here
     public void goToContactSetting(View v){
         myIntent = new Intent(this,ContactSetting.class);//start ContactSetting
@@ -32,14 +39,38 @@ public class MainActivity extends FragmentActivity
         startActivity(myIntent);
     }
     public void goToAlarmSound(View v){
-        if(mediaPlayer.isPlaying()){mediaPlayer.pause();}
+
+        boolean fl = this.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
+        if(fl){
+                Log.e("flashlight", "available");}
+        else{Log.e(" no flashlight", "null");}
+
+
+        if(flashOn){
+            cam.stopPreview();
+            cam.release();
+            flashOn = false;
+        }else{flashlight();
+            Log.e("flashlight", "start");}
+
+        if(mediaPlayer.isPlaying()){
+            mediaPlayer.pause();
+
+        }
         else {
+
             AudioManager audio = (AudioManager) this.getSystemService(this.AUDIO_SERVICE);
             int max = audio.getStreamMaxVolume(AudioManager.STREAM_NOTIFICATION);
             audio.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
             audio.setStreamVolume(AudioManager.STREAM_RING, max, AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE);
-            mediaPlayer.start();
-            mediaPlayer.setLooping(true);
+            //mediaPlayer.start();
+            //mediaPlayer.setLooping(true);
+
+
+
+
+
+
         }
 
     }
@@ -71,6 +102,8 @@ public class MainActivity extends FragmentActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mediaPlayer = MediaPlayer.create(this, R.raw.alarm_danger);
+        flashOn = false;
+
 
 
 
@@ -92,6 +125,22 @@ public class MainActivity extends FragmentActivity
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void flashlight(){
+
+        cam = Camera.open();
+        p = cam.getParameters();
+        p.setFlashMode(Parameters.FLASH_MODE_TORCH);
+        cam.setParameters(p);
+        flashOn = true;
+        cam.startPreview();
+
+
+
+
+
+
     }
 
 }
