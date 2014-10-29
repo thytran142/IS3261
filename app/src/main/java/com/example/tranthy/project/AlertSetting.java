@@ -53,7 +53,6 @@ public class AlertSetting extends Activity implements AdapterView.OnItemSelected
         status_image = (ImageView)findViewById(R.id.status_image);
         batteryText = (TextView)findViewById(R.id.batteryStatus);
         battery_image = (ImageView)findViewById(R.id.battery_image);
-        background.setBackgroundResource(R.drawable.background3);
         alertIntent = new Intent(MY_ACTION );
         manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
