@@ -50,7 +50,7 @@
     <string name="setting_instruct">Alert Setting: For you to customize your options about LocateMi.</string>
     <string name="SOS_instruct">SOS: For you to send alert messages to all contacts which you saved in case you need all their helps.</string>
     <!-- Message History xml string value -->
-    <string name="msgHistory">Message History</string>
+    <string name="msgHistory">Alert History</string>
     <string name="msgID">ID</string>
     <string name="receiver">Receiver</string>
     <string name="message">Status</string>

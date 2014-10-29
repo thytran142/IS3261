@@ -39,6 +39,8 @@ public class LocationService extends IntentService {
     LocationListener locListener;
     Location location;
     String message;
+    String shortMessage;
+    String smsMessage;
     SmsManager sms;
     GMailSender sender;
     NotificationManager notificationManager;
@@ -149,6 +151,8 @@ public class LocationService extends IntentService {
         message = "This a auto message sent by LocateMi to notify you the sender Last Known Location: \n" + addressText +"\n"+ "Lati:"
                 + location.getLatitude()+ ",Long:" + location.getLongitude();
 
+        shortMessage = "Lati:"+ location.getLatitude()+ " Long:" + location.getLongitude();
+        smsMessage = addressText +" "+ shortMessage;
 
 
         //Obtain all the receivers info
@@ -188,10 +192,10 @@ public class LocationService extends IntentService {
 
     public void sendBySMS(String name,String number, String addition,Time time){
             try {
-                SmsManager sms = SmsManager.getDefault();
-                sms.sendTextMessage(number,null, addition, null, null);
+                //SmsManager sms = SmsManager.getDefault();
+                //sms.sendTextMessage(number,null, smsMessage+"\n"+addition, null, null);
                 String success = "SMS Sent";
-                long id = mdb.insertMsgHistory(name + "\n" + number, success, time.toString().substring(0, 8) + "\n" + time.toString().substring(9, 13)) ;
+                long id = mdb.insertMsgHistory(name, success+"\n"+shortMessage+"\n"+addressText, time.toString().substring(0, 8) + "\n" + time.toString().substring(9, 13)) ;
 
 
 
@@ -200,7 +204,7 @@ public class LocationService extends IntentService {
                 //if sms fail to send
                 String error = "SMS Failed";
                 //log into db
-                long id = mdb.insertMsgHistory(name, error, time.toString().substring(0, 8) + "\n" + time.toString().substring(9, 13)) ;
+                long id = mdb.insertMsgHistory(name, error+"\n"+shortMessage+"\n"+addressText, time.toString().substring(0, 8) + "\n" + time.toString().substring(9, 13)) ;
                 Log.e("SMS FAIL", e.toString());
             }
     }
@@ -210,14 +214,14 @@ public class LocationService extends IntentService {
             sender = new GMailSender();
             sender.sendMail(message+"\n"+addition,email);
             String success = "EMAIL Sent";
-            long id = mdb.insertMsgHistory(name,success,time.toString().substring(0, 8)+"\n"+time.toString().substring(9, 13)) ;
+            long id = mdb.insertMsgHistory(name,success+"\n"+shortMessage+"\n"+addressText,time.toString().substring(0, 8)+"\n"+time.toString().substring(9, 13)) ;
 
         } catch (Exception e) {
             notificationManager.notify(1,failNotification);
             //if fail to send
             String error = "EMAIL Failed";
             //log into db
-            long id = mdb.insertMsgHistory(name,error,time.toString().substring(0, 8)+"\n"+time.toString().substring(9, 13)) ;
+            long id = mdb.insertMsgHistory(name,error+"\n"+shortMessage+"\n"+addressText,time.toString().substring(0, 8)+"\n"+time.toString().substring(9, 13)) ;
             Log.e("EMAIL FAIL", e.toString());
         }
 
