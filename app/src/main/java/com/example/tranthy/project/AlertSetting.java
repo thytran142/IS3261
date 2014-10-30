@@ -6,9 +6,8 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.IntentFilter;
-import android.os.AsyncTask;
+import android.os.BatteryManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -34,6 +33,8 @@ public class AlertSetting extends Activity implements AdapterView.OnItemSelected
     Button activate,deactivate;
     TextView alertStatus;
     ImageView status_image;
+    TextView batteryText;
+    ImageView battery_image;
     Intent alertIntent;
     public static final String MY_ACTION = "ALERT_ACTIVATE";
     IntentFilter intentFilter = new IntentFilter(MY_ACTION);
@@ -49,6 +50,8 @@ public class AlertSetting extends Activity implements AdapterView.OnItemSelected
         deactivate = (Button)findViewById(R.id.deactivation);
         alertStatus = (TextView)findViewById(R.id.alertStatus);
         status_image = (ImageView)findViewById(R.id.status_image);
+        batteryText = (TextView)findViewById(R.id.batteryStatus);
+        battery_image = (ImageView)findViewById(R.id.battery_image);
 
         alertIntent = new Intent(MY_ACTION );
         //registerReceiver(receiver, intentFilter);
@@ -76,6 +79,24 @@ public class AlertSetting extends Activity implements AdapterView.OnItemSelected
         alertStatus.setText("ALERT STATUS: OFF");
         status_image.setBackgroundResource(R.drawable.status_off);
     }
+
+        //check battery status
+        IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+        Intent batteryStatus = this.registerReceiver(null, ifilter);
+        int level = batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
+        int scale = batteryStatus.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
+
+        float batteryPct = (level / (float)scale) * 100;
+
+        if(batteryPct<=40.0){
+           battery_image.setBackgroundResource(R.drawable.warning);
+           batteryText.setText("Power is not within recommended range");
+           }else{
+            battery_image.setBackgroundResource(R.drawable.ok_good);
+            batteryText.setText("Power is within recommended range");
+        }
+
+
 
     }
 

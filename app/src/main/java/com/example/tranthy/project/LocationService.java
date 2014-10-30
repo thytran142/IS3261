@@ -78,10 +78,7 @@ public class LocationService extends IntentService {
                 .build();
 
 //-------------------------------------------------------------------------------------------------//
-
     }
-
-
     @Override
     protected void onHandleIntent(Intent intent) {
         locManager=(LocationManager)this.getSystemService(Context.LOCATION_SERVICE);
@@ -100,12 +97,8 @@ public class LocationService extends IntentService {
             @Override
             public void onProviderDisabled(String s) {}
         };
-
-
         locManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locListener);
         location = locManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-
-
         Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
         // Create a list to contain the result address
         List<Address> addresses = null;
@@ -117,7 +110,6 @@ public class LocationService extends IntentService {
             Log.e("LocationSampleActivity",
                     "IO Exception in getFromLocation()");
             e1.printStackTrace();
-
         } catch (IllegalArgumentException e2) {
             // Error message to post in the log
             String errorString = "Illegal arguments " +
@@ -128,13 +120,10 @@ public class LocationService extends IntentService {
             Log.e("LocationSampleActivity", errorString);
             e2.printStackTrace();
         }
-
         // If the reverse geocode returned an address
         if (addresses != null && addresses.size() > 0) {
             // Get the first address
-
             Address address = addresses.get(0);
-
             addressText = String.format(
                     "%s, %s, %s",
                     // If there's a street address, add it
@@ -144,16 +133,13 @@ public class LocationService extends IntentService {
                     address.getLocality(),
                     // The country of the address
                     address.getCountryName());
-
         }
-
         //set default message to be sent after getting the info
         message = "This a auto message sent by LocateMi to notify you the sender Last Known Location: \n" + addressText +"\n"+ "Lati:"
                 + location.getLatitude()+ ",Long:" + location.getLongitude();
 
         shortMessage = "Lati:"+ location.getLatitude()+ " Long:" + location.getLongitude();
         smsMessage = addressText +" "+ shortMessage;
-
 
         //Obtain all the receivers info
         ArrayList<String[]> receivers = new ArrayList<String[]>();
@@ -181,30 +167,24 @@ public class LocationService extends IntentService {
             else if(receiver[4].equals("EMAIL")) {
                 sendByEMAIL(receiver[1], receiver[3], receiver[5], today);
             }
-
         }
         mdb.close();
         locManager.removeUpdates(locListener);
         notificationManager.notify(1,myNotification);
-
-
     }
 
     public void sendBySMS(String name,String number, String addition,Time time){
             try {
-                //SmsManager sms = SmsManager.getDefault();
-                //sms.sendTextMessage(number,null, smsMessage+"\n"+addition, null, null);
+                SmsManager sms = SmsManager.getDefault();
+                sms.sendTextMessage(number,null, smsMessage+"\n"+addition, null, null);
                 String success = "SMS Sent";
-                long id = mdb.insertMsgHistory(name, success+"\n"+shortMessage+"\n"+addressText, time.toString().substring(0, 8) + "\n" + time.toString().substring(9, 13)) ;
-
-
-
+                long id = mdb.insertMsgHistory(name, success+"\n"+shortMessage+"\n"+addressText, time.toString().substring(0, 8) + " " + time.toString().substring(9, 13)) ;
             } catch (Exception e) {
                 notificationManager.notify(1,failNotification);
                 //if sms fail to send
                 String error = "SMS Failed";
                 //log into db
-                long id = mdb.insertMsgHistory(name, error+"\n"+shortMessage+"\n"+addressText, time.toString().substring(0, 8) + "\n" + time.toString().substring(9, 13)) ;
+                long id = mdb.insertMsgHistory(name, error+"\n"+shortMessage+"\n"+addressText, time.toString().substring(0, 8) + " " + time.toString().substring(9, 13)) ;
                 Log.e("SMS FAIL", e.toString());
             }
     }
@@ -214,17 +194,15 @@ public class LocationService extends IntentService {
             sender = new GMailSender();
             sender.sendMail(message+"\n"+addition,email);
             String success = "EMAIL Sent";
-            long id = mdb.insertMsgHistory(name,success+"\n"+shortMessage+"\n"+addressText,time.toString().substring(0, 8)+"\n"+time.toString().substring(9, 13)) ;
-
+            long id = mdb.insertMsgHistory(name,success+"\n"+shortMessage+"\n"+addressText,time.toString().substring(0, 8)+" "+time.toString().substring(9, 13)) ;
         } catch (Exception e) {
             notificationManager.notify(1,failNotification);
             //if fail to send
             String error = "EMAIL Failed";
             //log into db
-            long id = mdb.insertMsgHistory(name,error+"\n"+shortMessage+"\n"+addressText,time.toString().substring(0, 8)+"\n"+time.toString().substring(9, 13)) ;
+            long id = mdb.insertMsgHistory(name,error+"\n"+shortMessage+"\n"+addressText,time.toString().substring(0, 8)+" "+time.toString().substring(9, 13)) ;
             Log.e("EMAIL FAIL", e.toString());
         }
-
     }
 
     public ArrayList<String[]> getAllReceivers() throws SQLException {
@@ -236,7 +214,6 @@ public class LocationService extends IntentService {
                 String[] contact = {c.getString(0), c.getString(1), c.getString(2),c.getString(3),c.getString(4),c.getString(5)};
                 contacts.add(contact);
             } while (c.moveToNext());
-
         }
         cdb.close();
         return contacts;

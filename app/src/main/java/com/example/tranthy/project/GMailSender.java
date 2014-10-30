@@ -54,13 +54,6 @@ public class GMailSender extends javax.mail.Authenticator {
             return new PasswordAuthentication(user, password);
     }
 
-
-
-
-
-
-
-
     public synchronized void sendMail(String body, String recipients) throws Exception {
         try{
             MimeMessage message = new MimeMessage(session);
@@ -118,9 +111,6 @@ public class GMailSender extends javax.mail.Authenticator {
         }
     }
 }
-
-
-
 final class JSSEProvider extends Provider {
 
     public JSSEProvider() {

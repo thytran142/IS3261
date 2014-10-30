@@ -14,13 +14,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
-
 import android.location.LocationManager;
 import android.view.View;
 import android.widget.TextView;
@@ -58,9 +51,6 @@ public class MyLocation extends Activity {
             Toast.makeText(this,"Enable location services for accurate data",Toast.LENGTH_SHORT).show();
         }
         else locationEnabled=true;
-
-
-
     }
 
     @Override
@@ -79,13 +69,11 @@ public class MyLocation extends Activity {
             return true;
         }
         return super.onOptionsItemSelected(item);
-
     }
 
     public void getCurrentLocation(View view){
 
         requestLocation();
-
     }
 
     public void requestLocation(){
@@ -105,7 +93,6 @@ public class MyLocation extends Activity {
 
                 current_latitude.setText(lat.toString());
                 current_longitude.setText(lon.toString());
-
 
                 Geocoder geocoder = new Geocoder(getApplicationContext(),Locale.getDefault());
                 // Create a list to contain the result address
@@ -129,7 +116,6 @@ public class MyLocation extends Activity {
                     Log.e("LocationSampleActivity", errorString);
                     e2.printStackTrace();
                 }
-
                 // If the reverse geocode returned an address
                 if (addresses != null && addresses.size() > 0) {
                     // Get the first address

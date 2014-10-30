@@ -2,7 +2,6 @@ package com.example.tranthy.project;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -20,8 +19,6 @@ import android.text.format.Time;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -32,11 +29,12 @@ import java.util.Locale;
 public class SOSActivity extends Activity {
     CountDownTimer cdt;
     AlertDialog alert;
-    contact_list cdb;
-    MessageDB mdb;
+    contact_list cdb = new contact_list(this);
+    MessageDB mdb = new MessageDB(this);
     String addressText;
     String shortMessage;
     String[] receiver;
+    boolean trigger = false;
     Time today;
     final String EAMessage = "Emergency Alert!, Please contact/find me ASAP!";
     private LocationManager locationManager;
@@ -46,6 +44,7 @@ public class SOSActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sos);
+        final sendMailTask smt = new sendMailTask();
         today = new Time(Time.getCurrentTimezone());
         final Intent i = new Intent(this, MainActivity.class);
         requestLocation();
@@ -64,54 +63,37 @@ public class SOSActivity extends Activity {
         alert = alertDialog.create();
         alert.show();
 
-
         cdt = new CountDownTimer(11000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
-                alert.setMessage("00:"+ ((millisUntilFinished/1000)));
+                alert.setMessage("00:" + ((millisUntilFinished / 1000)));
             }
 
             @Override
             public void onFinish() {
                 alert.hide();
-                mdb.open();
+
                 ArrayList<String[]> receivers = new ArrayList<String[]>();
-                try{
-                    receivers=getAllReceivers();
-                }catch(SQLException e){
+                try {
+                    receivers = getAllReceivers();
+                } catch (SQLException e) {
                     e.printStackTrace();
                 }
-                for(int x = 0;x<receivers.size();x++) {
+                for (int x = 0; x < receivers.size(); x++) {
                     Log.e("Size of detected receivers", "" + receivers.size());
                     receiver = receivers.get(x);
                     today.setToNow();
-                    sendBySMS(receiver[1],receiver[2],today);
-                    sendMailTask smt = new sendMailTask();
-                    smt.execute();
+                    //sendBySMS(receiver[1], receiver[2], today);
 
 
-
-
-
-
-
-
-
-
-                    locationManager.removeUpdates(locationListener);
-                    mdb.close();
                 }
-
-
+                smt.execute();
+                locationManager.removeUpdates(locationListener);
 
             }
         }.start();
 
-
-
     }
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -140,22 +122,18 @@ public class SOSActivity extends Activity {
                 String[] contact = {c.getString(0), c.getString(1), c.getString(2),c.getString(3),c.getString(4),c.getString(5)};
                 contacts.add(contact);
             } while (c.moveToNext());
-
         }
         cdb.close();
         return contacts;
     }
 
     public void sendBySMS(String name,String number ,Time time){
+        mdb.open();
         try {
-
             SmsManager sms = SmsManager.getDefault();
             sms.sendTextMessage(number,null, EAMessage+", "+shortMessage+", "+addressText, null, null);
             String success = "Emergency SMS Sent";
             long id = mdb.insertMsgHistory(name, success+"\n"+shortMessage+"\n"+addressText, time.toString().substring(0, 8) + "\n" + time.toString().substring(9, 13)) ;
-
-
-
         } catch (Exception e) {
             //if sms fail to send
             String error = "SMS Failed";
@@ -163,15 +141,16 @@ public class SOSActivity extends Activity {
             long id = mdb.insertMsgHistory(name, error+"\n"+shortMessage+"\n"+addressText, time.toString().substring(0, 8) + "\n" + time.toString().substring(9, 13)) ;
             Log.e("SMS FAIL", e.toString());
         }
+        mdb.close();
     }
 
     public void sendByEMAIL(String name, String email, Time time){
+        mdb.open();
         try {
             sender = new GMailSender();
-            sender.sendMail(EAMessage+"\n"+shortMessage+"\n"+addressText,email);
+            sender.sendMail("FROM "+name+": "+EAMessage+"\n"+shortMessage+"\n"+addressText,email);
             String success = "EMAIL Sent";
             long id = mdb.insertMsgHistory(name,success+"\n"+shortMessage+"\n"+addressText,time.toString().substring(0, 8)+"\n"+time.toString().substring(9, 13)) ;
-
         } catch (Exception e) {
             //if fail to send
             String error = "EMAIL Failed";
@@ -179,18 +158,16 @@ public class SOSActivity extends Activity {
             long id = mdb.insertMsgHistory(name,error+"\n"+shortMessage+"\n"+addressText,time.toString().substring(0, 8)+"\n"+time.toString().substring(9, 13)) ;
             Log.e("EMAIL FAIL", e.toString());
         }
-
+        mdb.close();
     }
 
     public void requestLocation(){
         //progressDialog to disable view interaction when retrieving
-
         locationManager=(LocationManager)this.getSystemService(Context.LOCATION_SERVICE);
         //Defines a listener that responds to location updates
         locationListener=new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
-
                 Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
                 // Create a list to contain the result address
                 List<Address> addresses = null;
@@ -202,7 +179,6 @@ public class SOSActivity extends Activity {
                     Log.e("LocationSampleActivity",
                             "IO Exception in getFromLocation()");
                     e1.printStackTrace();
-
                 } catch (IllegalArgumentException e2) {
                     // Error message to post in the log
                     String errorString = "Illegal arguments " +
@@ -213,7 +189,6 @@ public class SOSActivity extends Activity {
                     Log.e("LocationSampleActivity", errorString);
                     e2.printStackTrace();
                 }
-
                 // If the reverse geocode returned an address
                 if (addresses != null && addresses.size() > 0) {
                     // Get the first address
@@ -230,11 +205,9 @@ public class SOSActivity extends Activity {
                             // The country of the address
                             address.getCountryName());
                 }
-
                 shortMessage = "Lati:"+ location.getLatitude()+ " Long:" + location.getLongitude();
 
             }
-
             @Override
             public void onStatusChanged(String s, int i, Bundle bundle) {}
 
@@ -249,15 +222,26 @@ public class SOSActivity extends Activity {
     }
 
     class sendMailTask extends AsyncTask<Void, Void, Void> {
-
         sendMailTask() {}
-
         @Override
         protected Void doInBackground(Void... arg0) {
-            today.setToNow();
-            sendByEMAIL(receiver[1],receiver[3],today);
+
+
+            ArrayList<String[]> receivers = new ArrayList<String[]>();
+            try {
+                receivers = getAllReceivers();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            for (int x = 0; x < receivers.size(); x++) {
+                Log.e("Size of detected receivers", "" + receivers.size());
+                receiver = receivers.get(x);
+                today.setToNow();
+                sendByEMAIL(receiver[1], receiver[3], today);
+            }
             return null;
         }
+
 
     }
 }

@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -14,11 +13,10 @@ import android.view.MenuItem;
 import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,22 +24,22 @@ import java.util.ArrayList;
 
 public class MessageHistory extends Activity {
     private MessageDB db;
-    private View background;
     ListView listView;
+    ArrayAdapter adapter;
+    ArrayList<String> stringList = new ArrayList<String>();
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         db = new MessageDB(this);
         setContentView(R.layout.message_history);
-
-
-
         ArrayList<String[]> msgHistory = GetMsgHistory();
         //Toast msg to indicate if it is empty
-
-
         if(msgHistory.isEmpty()){
             Toast.makeText(this, "Message History is empty", Toast.LENGTH_SHORT).show();
+            stringList.add("The Alert History is Empty");
+            adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,stringList);
+            listView = (ListView) findViewById(R.id.history_listView);
+            listView.setAdapter(adapter);
         }
         else{
             listView = (ListView) findViewById(R.id.history_listView);
@@ -65,11 +63,10 @@ public class MessageHistory extends Activity {
             return true;
         }
         return super.onOptionsItemSelected(item);
-
     }
 
     public ArrayList<String[]> GetMsgHistory() {
-//--get all msg history---
+        //--get all msg history---
         db.open();
         Cursor c = db.getAllMsgHistory();
         ArrayList<String[]> msgHistory = new ArrayList<String[]>();
@@ -102,16 +99,10 @@ public class MessageHistory extends Activity {
                 startActivity(myIntent);
             }
         });
-
-
-
         alertDialog.show();
-
-
     }
 
     class customAdapter extends BaseAdapter {
-
         Context context;
         ArrayList<String[]> data;
         private LayoutInflater inflater = null;
@@ -123,7 +114,6 @@ public class MessageHistory extends Activity {
             inflater = (LayoutInflater) context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         }
-
         @Override
         public int getCount() {
             // TODO Auto-generated method stub
@@ -154,19 +144,18 @@ public class MessageHistory extends Activity {
             time.setText(data.get(position)[3]);
             ImageView icon_type = (ImageView) vi.findViewById(R.id.icon_type);
             TextView text = (TextView) vi.findViewById(R.id.text);
-            if(data.get(position)[2].substring(0,3).equalsIgnoreCase("SMS")){
+            if(data.get(position)[2].contains("SMS Sent")){
                 icon_type.setBackgroundResource(R.drawable.sms_icon);
                 text.setText(data.get(position)[2].substring(9));
             }
-            else if(data.get(position)[2].substring(0,5).equalsIgnoreCase("EMAIL")){
+            else if(data.get(position)[2].contains("EMAIL Sent")){
                 icon_type.setBackgroundResource(R.drawable.gmail_icon);
                 text.setText(data.get(position)[2].substring(11));
             }
-
-
-
-
-
+            else if(data.get(position)[2].contains("Failed")){
+                icon_type.setBackgroundResource(R.drawable.warning);
+                text.setText(data.get(position)[2]);
+            }
             return vi;
         }
     }
