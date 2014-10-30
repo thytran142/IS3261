@@ -2,17 +2,22 @@ package com.example.tranthy.project;
 /* This class is to create the account so user can have passcode every time they enter this class*/
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,7 +27,7 @@ import java.util.ArrayList;
 public class MessageHistory extends Activity {
     private MessageDB db;
     private View background;
-
+    ListView listView;
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -33,18 +38,15 @@ public class MessageHistory extends Activity {
 
         ArrayList<String[]> msgHistory = GetMsgHistory();
         //Toast msg to indicate if it is empty
+
+
         if(msgHistory.isEmpty()){
             Toast.makeText(this, "Message History is empty", Toast.LENGTH_SHORT).show();
         }
-
-        for (int i = 0; i < msgHistory.size(); i++) {
-            String[] msg = msgHistory.get(i);
-            insertRow(msg[0], msg[1], msg[2], msg[3]);
+        else{
+            listView = (ListView) findViewById(R.id.history_listView);
+            listView.setAdapter(new customAdapter(this, msgHistory));
         }
-
-
-
-
 
     }
     @Override
@@ -81,36 +83,6 @@ public class MessageHistory extends Activity {
         return msgHistory;
     }
 
-    public void insertRow(String rowId,String receiver,String message, String time){
-        ViewGroup table = (ViewGroup)findViewById(R.id.table);
-        TableRow newRow = new TableRow(table.getContext());
-
-        TextView receiverText = new TextView(newRow.getContext());
-        TextView messageText = new TextView(newRow.getContext());
-        TextView timeText = new TextView(newRow.getContext());
-
-        receiverText.setText(String.valueOf(receiver));
-        receiverText.setLayoutParams(
-                new TableRow.LayoutParams(0,LinearLayout.LayoutParams.MATCH_PARENT,0.2f));
-        receiverText.setGravity(Gravity.CENTER);
-
-        messageText.setText(String.valueOf(message));
-        messageText.setLayoutParams(
-                new TableRow.LayoutParams(0,LinearLayout.LayoutParams.MATCH_PARENT,0.5f));
-        messageText.setGravity(Gravity.CENTER);
-
-        timeText.setText(String.valueOf(time));
-        timeText.setLayoutParams(
-                new TableRow.LayoutParams(0,LinearLayout.LayoutParams.MATCH_PARENT,0.3f));
-        timeText.setGravity(Gravity.CENTER);
-
-        newRow.addView(receiverText);
-        newRow.addView(messageText);
-        newRow.addView(timeText);
-        table.addView(newRow);
-
-    }
-
     public void clearAll(View view){
         final Intent myIntent = new Intent(this,MessageHistory.class);
         final AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
@@ -136,6 +108,67 @@ public class MessageHistory extends Activity {
         alertDialog.show();
 
 
+    }
+
+    class customAdapter extends BaseAdapter {
+
+        Context context;
+        ArrayList<String[]> data;
+        private LayoutInflater inflater = null;
+
+        public customAdapter(Context context, ArrayList<String[]> data) {
+            // TODO Auto-generated constructor stub
+            this.context = context;
+            this.data = data;
+            inflater = (LayoutInflater) context
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        }
+
+        @Override
+        public int getCount() {
+            // TODO Auto-generated method stub
+            return data.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            // TODO Auto-generated method stub
+            return data.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            // TODO Auto-generated method stub
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            // TODO Auto-generated method stub
+            View vi = convertView;
+            if (vi == null)
+                vi = inflater.inflate(R.layout.customlistview, null);
+            TextView header = (TextView) vi.findViewById(R.id.header);
+            TextView time = (TextView) vi.findViewById(R.id.time);
+            header.setText(data.get(position)[1]);
+            time.setText(data.get(position)[3]);
+            ImageView icon_type = (ImageView) vi.findViewById(R.id.icon_type);
+            TextView text = (TextView) vi.findViewById(R.id.text);
+            if(data.get(position)[2].substring(0,3).equalsIgnoreCase("SMS")){
+                icon_type.setBackgroundResource(R.drawable.sms_icon);
+                text.setText(data.get(position)[2].substring(9));
+            }
+            else if(data.get(position)[2].substring(0,5).equalsIgnoreCase("EMAIL")){
+                icon_type.setBackgroundResource(R.drawable.gmail_icon);
+                text.setText(data.get(position)[2].substring(11));
+            }
+
+
+
+
+
+            return vi;
+        }
     }
 
 

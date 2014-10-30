@@ -129,21 +129,9 @@ public class MainActivity extends FragmentActivity
         p = cam.getParameters();
         p.setFlashMode(Parameters.FLASH_MODE_TORCH);
         cam.setParameters(p);
-        flashOn = true;
         cam.startPreview();
+        flashOn = true;
 
-        new CountDownTimer(60000, 2000) {
-
-            public void onTick(long millisUntilFinished) {
-                cam.stopPreview();
-                cam.startPreview();
-            }
-
-            public void onFinish() {
-                cam.stopPreview();
-                cam.release();
-            }
-        }.start();
 
 
 
