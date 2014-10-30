@@ -12,6 +12,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.telephony.SmsManager;
@@ -32,8 +33,11 @@ public class SOSActivity extends Activity {
     CountDownTimer cdt;
     AlertDialog alert;
     contact_list cdb;
+    MessageDB mdb;
     String addressText;
     String shortMessage;
+    String[] receiver;
+    Time today;
     final String EAMessage = "Emergency Alert!, Please contact/find me ASAP!";
     private LocationManager locationManager;
     private LocationListener locationListener;
@@ -42,6 +46,7 @@ public class SOSActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sos);
+        today = new Time(Time.getCurrentTimezone());
         final Intent i = new Intent(this, MainActivity.class);
         requestLocation();
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
@@ -69,6 +74,7 @@ public class SOSActivity extends Activity {
             @Override
             public void onFinish() {
                 alert.hide();
+                mdb.open();
                 ArrayList<String[]> receivers = new ArrayList<String[]>();
                 try{
                     receivers=getAllReceivers();
@@ -77,10 +83,11 @@ public class SOSActivity extends Activity {
                 }
                 for(int x = 0;x<receivers.size();x++) {
                     Log.e("Size of detected receivers", "" + receivers.size());
-                    String[] receiver = receivers.get(x);
-
-
-
+                    receiver = receivers.get(x);
+                    today.setToNow();
+                    sendBySMS(receiver[1],receiver[2],today);
+                    sendMailTask smt = new sendMailTask();
+                    smt.execute();
 
 
 
@@ -92,6 +99,7 @@ public class SOSActivity extends Activity {
 
 
                     locationManager.removeUpdates(locationListener);
+                    mdb.close();
                 }
 
 
@@ -144,7 +152,7 @@ public class SOSActivity extends Activity {
             SmsManager sms = SmsManager.getDefault();
             sms.sendTextMessage(number,null, EAMessage+", "+shortMessage+", "+addressText, null, null);
             String success = "Emergency SMS Sent";
-            //long id = mdb.insertMsgHistory(name, success+"\n"+shortMessage+"\n"+addressText, time.toString().substring(0, 8) + "\n" + time.toString().substring(9, 13)) ;
+            long id = mdb.insertMsgHistory(name, success+"\n"+shortMessage+"\n"+addressText, time.toString().substring(0, 8) + "\n" + time.toString().substring(9, 13)) ;
 
 
 
@@ -152,23 +160,23 @@ public class SOSActivity extends Activity {
             //if sms fail to send
             String error = "SMS Failed";
             //log into db
-            //long id = mdb.insertMsgHistory(name, error+"\n"+shortMessage+"\n"+addressText, time.toString().substring(0, 8) + "\n" + time.toString().substring(9, 13)) ;
+            long id = mdb.insertMsgHistory(name, error+"\n"+shortMessage+"\n"+addressText, time.toString().substring(0, 8) + "\n" + time.toString().substring(9, 13)) ;
             Log.e("SMS FAIL", e.toString());
         }
     }
 
-    public void sendByEMAIL(String name, String email, String addition, Time time){
+    public void sendByEMAIL(String name, String email, Time time){
         try {
             sender = new GMailSender();
             sender.sendMail(EAMessage+"\n"+shortMessage+"\n"+addressText,email);
             String success = "EMAIL Sent";
-            //long id = mdb.insertMsgHistory(name,success+"\n"+shortMessage+"\n"+addressText,time.toString().substring(0, 8)+"\n"+time.toString().substring(9, 13)) ;
+            long id = mdb.insertMsgHistory(name,success+"\n"+shortMessage+"\n"+addressText,time.toString().substring(0, 8)+"\n"+time.toString().substring(9, 13)) ;
 
         } catch (Exception e) {
             //if fail to send
             String error = "EMAIL Failed";
             //log into db
-            //long id = mdb.insertMsgHistory(name,error+"\n"+shortMessage+"\n"+addressText,time.toString().substring(0, 8)+"\n"+time.toString().substring(9, 13)) ;
+            long id = mdb.insertMsgHistory(name,error+"\n"+shortMessage+"\n"+addressText,time.toString().substring(0, 8)+"\n"+time.toString().substring(9, 13)) ;
             Log.e("EMAIL FAIL", e.toString());
         }
 
@@ -182,10 +190,6 @@ public class SOSActivity extends Activity {
         locationListener=new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
-
-                Double lat = location.getLatitude();
-                Double lon = location.getLongitude();
-
 
                 Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
                 // Create a list to contain the result address
@@ -244,5 +248,22 @@ public class SOSActivity extends Activity {
 
     }
 
+    class sendMailTask extends AsyncTask<Void, Void, Void> {
 
+        sendMailTask() {}
+
+        @Override
+        protected Void doInBackground(Void... arg0) {
+            today.setToNow();
+            sendByEMAIL(receiver[1],receiver[3],today);
+            return null;
+        }
+
+    }
 }
+
+
+
+
+
+

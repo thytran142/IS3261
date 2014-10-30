@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.BitmapFactory;
 import android.hardware.Camera;
 import android.hardware.Camera.Parameters;
 import android.os.Bundle;
@@ -15,10 +14,7 @@ import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.Toast;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 
@@ -136,7 +132,18 @@ public class MainActivity extends FragmentActivity
         flashOn = true;
         cam.startPreview();
 
+        new CountDownTimer(60000, 2000) {
 
+            public void onTick(long millisUntilFinished) {
+                cam.stopPreview();
+                cam.startPreview();
+            }
+
+            public void onFinish() {
+                cam.stopPreview();
+                cam.release();
+            }
+        }.start();
 
 
 
