@@ -2,6 +2,7 @@ package com.example.tranthy.project;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -27,7 +28,7 @@ import java.util.Locale;
 
 
 public class SOSActivity extends Activity {
-    CountDownTimer cdt;
+    CountDownTimer cdt,innerCdt;
     AlertDialog alert;
     contact_list cdb = new contact_list(this);
     MessageDB mdb = new MessageDB(this);
@@ -36,21 +37,25 @@ public class SOSActivity extends Activity {
     String[] receiver;
     boolean trigger = false;
     Time today;
+    Intent i;
     final String EAMessage = "Emergency Alert!, Please contact/find me ASAP!";
     private LocationManager locationManager;
     private LocationListener locationListener;
     GMailSender sender;
+    ProgressDialog progressDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sos);
         final sendMailTask smt = new sendMailTask();
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Sending Emergency Alert");
         today = new Time(Time.getCurrentTimezone());
-        final Intent i = new Intent(this, MainActivity.class);
+        i = new Intent(this,MainActivity.class);
         requestLocation();
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
         alertDialog.setTitle("Emergency Alert trigger in");
-        alertDialog.setMessage("00:10");
+        alertDialog.setMessage("0:10");
         alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 dialog.cancel();
@@ -71,8 +76,8 @@ public class SOSActivity extends Activity {
 
             @Override
             public void onFinish() {
-                alert.hide();
-
+                alert.dismiss();
+                progressDialog.show();
                 ArrayList<String[]> receivers = new ArrayList<String[]>();
                 try {
                     receivers = getAllReceivers();
@@ -83,11 +88,14 @@ public class SOSActivity extends Activity {
                     Log.e("Size of detected receivers", "" + receivers.size());
                     receiver = receivers.get(x);
                     today.setToNow();
-                    //sendBySMS(receiver[1], receiver[2], today);
+                    sendBySMS(receiver[1], receiver[2], today);
 
 
                 }
+
                 smt.execute();
+                smt.onPostExecute();
+
                 locationManager.removeUpdates(locationListener);
 
             }
@@ -161,6 +169,11 @@ public class SOSActivity extends Activity {
         mdb.close();
     }
 
+    public void endTask(){
+        finish();
+        startActivity(i);
+    }
+
     public void requestLocation(){
         //progressDialog to disable view interaction when retrieving
         locationManager=(LocationManager)this.getSystemService(Context.LOCATION_SERVICE);
@@ -223,6 +236,7 @@ public class SOSActivity extends Activity {
 
     class sendMailTask extends AsyncTask<Void, Void, Void> {
         sendMailTask() {}
+
         @Override
         protected Void doInBackground(Void... arg0) {
 
@@ -240,6 +254,24 @@ public class SOSActivity extends Activity {
                 sendByEMAIL(receiver[1], receiver[3], today);
             }
             return null;
+        }
+
+        protected void onPostExecute(){
+
+            innerCdt= new CountDownTimer(11000, 1000) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+                    progressDialog.setMessage("Completing in 0:" + ((millisUntilFinished / 1000)));
+                }
+
+                @Override
+                public void onFinish() {
+                    progressDialog.dismiss();
+                    endTask();
+
+                }
+            }.start();
+
         }
 
 
