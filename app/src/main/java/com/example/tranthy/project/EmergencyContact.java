@@ -33,8 +33,7 @@ public class EmergencyContact extends Activity {
             R.drawable.syria, R.drawable.taiwan,R.drawable.thailand,R.drawable.turkey,R.drawable.arab,
             R.drawable.vietnam,R.drawable.yemen
     };
-    @Override
-    protected void onCreate(Bundle savedInstanceState){
+    @Override    protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.emergency_contact);
 

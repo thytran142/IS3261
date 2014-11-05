@@ -82,6 +82,11 @@
             android:parentActivityName=".MainActivity" >
         </activity>
         <activity
+            android:name=".CountrySOS"
+            android:label="@string/message_setting"
+            android:parentActivityName=".EmergencyContact" >
+        </activity>
+        <activity
             android:name=".AlertSetting"
             android:label="@string/alert_setting"
             android:parentActivityName=".MainActivity" >
@@ -102,6 +107,7 @@
             android:name=".SOSActivity"
             android:label="@string/title_activity_sos" >
         </activity>
+
     </application>
 
 </manifest>
