@@ -31,6 +31,7 @@ public class MainActivity extends FragmentActivity
     flashOffTask offTask;
     Timer oneTimer;
     Timer twoTimer;
+
     //Declare function intent here
     public void goToContactSetting(View v){
         myIntent = new Intent(this,ContactSetting.class);//start ContactSetting
@@ -48,14 +49,7 @@ public class MainActivity extends FragmentActivity
         else{Log.e(" no flashlight", "null");}
 
         //toggle flashlight
-        if(flashOn){
-            oneTimer.cancel();
-            twoTimer.cancel();
-            cam.stopPreview();
-            cam.release();
-            flashOn = false;
-        }else{flashlight();
-            Log.e("flashlight", "start");}
+       flashlight(flashOn);
 
         //toggle alarm sound
         if(mediaPlayer.isPlaying()){
@@ -99,10 +93,6 @@ public class MainActivity extends FragmentActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mediaPlayer = MediaPlayer.create(this, R.raw.alarm_danger);
-        onTask = new flashOnTask();
-        offTask = new flashOffTask();
-        oneTimer = new Timer();
-        twoTimer = new Timer();
         flashOn = false;
     }
     @Override
@@ -123,10 +113,24 @@ public class MainActivity extends FragmentActivity
         return super.onOptionsItemSelected(item);
     }
 
-    public void flashlight(){
-        flashOn = true;
-        oneTimer.schedule(onTask, 1000, 2000);
-        twoTimer.schedule(offTask, 2000, 2000);
+    public void flashlight(boolean checkFlash){
+        if(checkFlash == true){
+            oneTimer.cancel();
+            twoTimer.cancel();
+            onTask.cancel();
+            offTask.run();
+            offTask.cancel();
+            flashOn = false;
+        }
+        else if(checkFlash == false) {
+            oneTimer = new Timer();
+            twoTimer = new Timer();
+            onTask = new flashOnTask();
+            offTask = new flashOffTask();
+            oneTimer.schedule(onTask, 1000, 2000);
+            twoTimer.schedule(offTask, 2000, 2000);
+            flashOn = true;
+        }
     }
 
     class flashOnTask extends TimerTask {
@@ -141,7 +145,6 @@ public class MainActivity extends FragmentActivity
 
     class flashOffTask extends TimerTask {
         public void run() {
-            cam.stopPreview();
             cam.release();
         }
     }
