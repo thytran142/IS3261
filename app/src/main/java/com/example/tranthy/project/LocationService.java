@@ -13,6 +13,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v4.app.NotificationCompat;
 import android.telephony.SmsManager;
 import android.text.format.Time;
@@ -43,6 +44,7 @@ public class LocationService extends IntentService {
     String smsMessage;
     SmsManager sms;
     GMailSender sender;
+    CountDownTimer cdt_process;
     NotificationManager notificationManager;
     Notification myNotification, failNotification;
     public LocationService() {
@@ -98,6 +100,15 @@ public class LocationService extends IntentService {
             public void onProviderDisabled(String s) {}
         };
         locManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locListener);
+        cdt_process = new CountDownTimer(15000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                Log.e("updating location listener","waiting");
+            }
+            @Override
+            public void onFinish() {
+            }
+        }.start();
         location = locManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
         Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
         // Create a list to contain the result address
@@ -106,6 +117,10 @@ public class LocationService extends IntentService {
             //get 3 addresses
             addresses = geocoder.getFromLocation(location.getLatitude(),
                     location.getLongitude(), 3);
+
+                addresses = geocoder.getFromLocation(latitude,
+                        longitude, 3);
+
         } catch (IOException e1) {
             Log.e("LocationSampleActivity",
                     "IO Exception in getFromLocation()");

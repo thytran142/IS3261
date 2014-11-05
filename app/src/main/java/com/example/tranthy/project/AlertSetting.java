@@ -95,9 +95,6 @@ public class AlertSetting extends Activity implements AdapterView.OnItemSelected
             battery_image.setBackgroundResource(R.drawable.ok_good);
             batteryText.setText("Power is within recommended range");
         }
-
-
-
     }
 
     public void onItemSelected(AdapterView<?> parent, View view,
@@ -109,16 +106,12 @@ public class AlertSetting extends Activity implements AdapterView.OnItemSelected
     public void onNothingSelected(AdapterView<?> parent) {
 
     }
-
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.alert_setting_actions, menu);
         return true;
     }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -129,11 +122,8 @@ public class AlertSetting extends Activity implements AdapterView.OnItemSelected
             return true;
         }
         return super.onOptionsItemSelected(item);
-
     }
-
     public void activateAlert(View view) {
-
 
         pendingIntent = PendingIntent.getBroadcast(this, 1, alertIntent, 0);
         int finalInterval = Integer.parseInt(interval) * 60000 ;
@@ -162,9 +152,6 @@ public class AlertSetting extends Activity implements AdapterView.OnItemSelected
             alertStatus.setText("ALERT STATUS: OFF");
         }
     }
-
-
-
 }
 
 

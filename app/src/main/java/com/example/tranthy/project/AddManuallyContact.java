@@ -29,43 +29,46 @@ public class AddManuallyContact extends DialogFragment {
     TextView phoneError;
     TextView emailError;
     static String dialogTitle;
- //Interface containing methods to be implemented by calling activity
-    public interface AddManuallyContactInterface{
-        void submitContact(String name,String number, String email) throws SQLException;
-}
-    //Empty constructor required
-    public AddManuallyContact(){}
-    public void setDialogTitle(String title){
-        dialogTitle=title;
-    }
-    private boolean isEmpty(EditText input){
-        if(input.getText().toString().trim().length()>0){
-            return false;
-        }else return true;
-    }
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState){
-        View view= inflater.inflate(R.layout.add_contact_manually_dialog,container);
-        //Get the edit text and button views
-        txt_contact_name= (EditText)view.findViewById(R.id.txt_contact_name);
-        txt_phone_number=(EditText)view.findViewById(R.id.txt_phone_number);
-        txt_contact_email=(EditText)view.findViewById(R.id.txt_contact_email);
-        nameError=(TextView)view.findViewById(R.id.nameError);
-        phoneError=(TextView)view.findViewById(R.id.phoneError);
 
-        btn=(Button)view.findViewById(R.id.btn_Done);
+    //Interface containing methods to be implemented by calling activity
+    public interface AddManuallyContactInterface {
+        void submitContact(String name, String number, String email) throws SQLException;
+    }
+
+    //Empty constructor required
+    public AddManuallyContact() {
+    }
+
+    public void setDialogTitle(String title) {
+        dialogTitle = title;
+    }
+
+    private boolean isEmpty(EditText input) {
+        if (input.getText().toString().trim().length() > 0) {
+            return false;
+        } else return true;
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.add_contact_manually_dialog, container);
+        //Get the edit text and button views
+        txt_contact_name = (EditText) view.findViewById(R.id.txt_contact_name);
+        txt_phone_number = (EditText) view.findViewById(R.id.txt_phone_number);
+        txt_contact_email = (EditText) view.findViewById(R.id.txt_contact_email);
+        nameError = (TextView) view.findViewById(R.id.nameError);
+        phoneError = (TextView) view.findViewById(R.id.phoneError);
+
+        btn = (Button) view.findViewById(R.id.btn_Done);
         //Event handler for the button
-        btn.setOnClickListener(new View.OnClickListener(){
+        btn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 //validate the empty string first
-                if(isEmpty(txt_contact_name)){
+                if (isEmpty(txt_contact_name)) {
                     nameError.setText("This field cannot be empty!");
-                }
-                else if(isEmpty(txt_phone_number)){
+                } else if (isEmpty(txt_phone_number)) {
                     phoneError.setText("This field cannot be empty!");
-                }
-
-                else {
+                } else {
                     //get the calling activity
                     AddManuallyContactInterface activity = (AddManuallyContactInterface) getActivity();
                     try {
@@ -78,7 +81,7 @@ public class AddManuallyContact extends DialogFragment {
                 }
             }
         });//end event handler for the button
-        btn_cancel=(Button)view.findViewById(R.id.btn_Cancel_Manually);
+        btn_cancel = (Button) view.findViewById(R.id.btn_Cancel_Manually);
         btn_cancel.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 dismiss();
@@ -89,7 +92,6 @@ public class AddManuallyContact extends DialogFragment {
         getDialog().getWindow().setSoftInputMode(LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         //set the title for the dialog
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-
 
         return view;
 
