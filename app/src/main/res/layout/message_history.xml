@@ -18,15 +18,21 @@
             android:gravity="center"
             android:text="@string/msgHistory"
             android:textSize="28sp"
-            android:textStyle="bold" >
+            android:textStyle="bold"
+            android:textColor="#FF3300">
         </TextView>
+
         <Button
             android:id="@+id/clearButton"
-
-            android:layout_width="fill_parent"
+            android:background="@drawable/button"
+            android:textColor="#FFFFFF"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight=".3"
             android:text="Clear All"
             android:onClick="clearAll"/>
+
+
     </LinearLayout>
     <ListView
         android:id="@+id/history_listView"

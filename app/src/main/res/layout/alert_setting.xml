@@ -11,14 +11,15 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".MainActivity" >
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/alertTitle"
-        android:textSize="20dp"
-        android:textStyle="bold"
-        android:layout_gravity="center"/>
 
+    <TextView
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="@string/alertTitle"
+        android:gravity="center"
+        android:textSize="25dp"
+        android:textColor="#FF3300"
+        />
     <View
         android:layout_width="match_parent"
         android:layout_height="10dp"
@@ -61,16 +62,16 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         >
-    <Button
-        android:id="@+id/activation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Activate"
-        android:onClick="activateAlert"
-        android:layout_weight=".5"
-        android:layout_gravity="center"
-        />
-
+        <Button
+            android:id="@+id/activation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight=".4"
+            android:text="Activate"
+            android:background="@drawable/button"
+            android:textColor="#FFFFFF"
+            android:layout_marginRight="5dp"
+            android:onClick="activateAlert"/>
     <Button
         android:id="@+id/deactivation"
         android:layout_width="wrap_content"
@@ -78,7 +79,9 @@
         android:text="Deactivate"
         android:layout_weight=".4"
         android:onClick="deactivateAlert"
-        android:layout_gravity="center"/>
+        android:background="@drawable/button"
+        android:textColor="#FFFFFF"
+        android:layout_marginRight="5dp"/>
     </LinearLayout>
 
     <View
@@ -104,7 +107,7 @@
 
     <ImageView
         android:id="@+id/status_image"
-        android:background="@drawable/status_on"
+        android:background="@drawable/status_off"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_marginRight="12dp"
